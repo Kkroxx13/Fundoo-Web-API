@@ -14,7 +14,10 @@ using RepositoryLayer.Context;
 using Microsoft.EntityFrameworkCore;
 using RepositoryLayer.Interface;
 using RepositoryLayer.Services;
-using CommonLayer;
+
+using RepositoryLayer.Entity;
+using BusinessLibrary.Interface;
+using BusinessLibrary.Services;
 
 namespace FundooNotes
 {
@@ -31,7 +34,10 @@ namespace FundooNotes
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<UserContext>(opts => opts.UseSqlServer(Configuration["ConnectionString:FundooNotesDB"]));
-            services.AddScoped<IRL<User>, RL>();
+            
+            services.AddScoped<IUserBL, UserBL>();
+            services.AddScoped<IUserRL, UserRL>();
+
             services.AddControllers();
         }
 

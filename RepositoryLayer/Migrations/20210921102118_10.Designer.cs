@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RepositoryLayer.Context;
 
 namespace RepositoryLayer.Migrations
 {
     [DbContext(typeof(UserContext))]
-    partial class UserContextModelSnapshot : ModelSnapshot
+    [Migration("20210921102118_10")]
+    partial class _10
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -30,7 +32,7 @@ namespace RepositoryLayer.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FirstName")
                         .HasColumnType("nvarchar(max)");
@@ -46,33 +48,7 @@ namespace RepositoryLayer.Migrations
 
                     b.HasKey("UserId");
 
-                    b.HasIndex("Email")
-                        .IsUnique()
-                        .HasFilter("[Email] IS NOT NULL");
-
                     b.ToTable("Users");
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = 1L,
-                            CreatedAt = new DateTime(2020, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Email = "uncle.bob@gmail.com",
-                            FirstName = "Uncle",
-                            LastName = "Bob",
-                            ModifiedAt = new DateTime(2020, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "1234"
-                        },
-                        new
-                        {
-                            UserId = 2L,
-                            CreatedAt = new DateTime(2020, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Email = "aunty.bob@gmail.com",
-                            FirstName = "Aunty",
-                            LastName = "Bob",
-                            ModifiedAt = new DateTime(2020, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "1234"
-                        });
                 });
 #pragma warning restore 612, 618
         }

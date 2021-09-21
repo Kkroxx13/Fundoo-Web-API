@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Runtime.Serialization;
 using System.Text;
 
-namespace CommonLayer
+namespace RepositoryLayer.Entity
 {
     
    public class User

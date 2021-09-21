@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RepositoryLayer.Context;
 
 namespace RepositoryLayer.Migrations
 {
     [DbContext(typeof(UserContext))]
-    partial class UserContextModelSnapshot : ModelSnapshot
+    [Migration("20210921102200_11")]
+    partial class _11
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,28 +53,6 @@ namespace RepositoryLayer.Migrations
                         .HasFilter("[Email] IS NOT NULL");
 
                     b.ToTable("Users");
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = 1L,
-                            CreatedAt = new DateTime(2020, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Email = "uncle.bob@gmail.com",
-                            FirstName = "Uncle",
-                            LastName = "Bob",
-                            ModifiedAt = new DateTime(2020, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "1234"
-                        },
-                        new
-                        {
-                            UserId = 2L,
-                            CreatedAt = new DateTime(2020, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Email = "aunty.bob@gmail.com",
-                            FirstName = "Aunty",
-                            LastName = "Bob",
-                            ModifiedAt = new DateTime(2020, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Password = "1234"
-                        });
                 });
 #pragma warning restore 612, 618
         }

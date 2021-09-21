@@ -1,5 +1,6 @@
-﻿using CommonLayer;
+﻿
 using Microsoft.EntityFrameworkCore;
+using RepositoryLayer.Entity;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -19,6 +20,10 @@ namespace RepositoryLayer.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<User>()
+               .HasIndex(u => u.Email)
+               .IsUnique();
+
             modelBuilder.Entity<User>().HasData(new User
             {
                 UserId = 1,
@@ -39,7 +44,10 @@ namespace RepositoryLayer.Context
                 CreatedAt = new DateTime(2020, 02, 02),
                 ModifiedAt = new DateTime(2020, 02, 02)
             });
+
+
         }
+        
     }
     
 }
