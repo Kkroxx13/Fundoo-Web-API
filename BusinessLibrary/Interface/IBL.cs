@@ -4,7 +4,7 @@ using System.Text;
 
 namespace BusinessLibrary.Interface
 {
-    interface IBL
+    public interface IBL
     {
     }
 }

@@ -1,10 +1,11 @@
-﻿using System;
+﻿using BusinessLibrary.Interface;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace BusinessLibrary.Services
 {
-    class BL
+    public class BL:IBL
     {
     }
 }

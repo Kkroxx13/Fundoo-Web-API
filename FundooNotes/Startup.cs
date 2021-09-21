@@ -10,6 +10,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using RepositoryLayer.Context;
+using Microsoft.EntityFrameworkCore;
+using RepositoryLayer.Interface;
+using RepositoryLayer.Services;
+using CommonLayer;
 
 namespace FundooNotes
 {
@@ -25,6 +30,8 @@ namespace FundooNotes
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<UserContext>(opts => opts.UseSqlServer(Configuration["ConnectionString:FundooNotesDB"]));
+            services.AddScoped<IRL<User>, RL>();
             services.AddControllers();
         }
 

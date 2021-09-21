@@ -1,10 +1,16 @@
-﻿using System;
+﻿
+
+using CommonLayer;
 using System.Collections.Generic;
-using System.Text;
 
 namespace RepositoryLayer.Interface
 {
-    interface Interface1
+    public interface IRL<User>
     {
+        IEnumerable<User> GetAll();
+        User Get(long id);
+        void Add(User user);
+        void Update(User user, User user1);
+        void Delete(User user);
     }
 }
