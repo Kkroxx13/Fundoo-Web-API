@@ -52,7 +52,7 @@ namespace BusinessLibrary.Services
             }
         }
 
-        public User Get(LoginModel loginModel)
+        public ResponseModel Get(LoginModel loginModel)
         {
             try
             {

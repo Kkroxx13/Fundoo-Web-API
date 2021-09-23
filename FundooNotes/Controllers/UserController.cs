@@ -8,19 +8,27 @@ using RepositoryLayer.Interface;
 using RepositoryLayer.Entity;
 using CommonLayer.Model;
 using BusinessLibrary.Interface;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Microsoft.Extensions.Configuration;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FundooNotes.Controllers
 {
     [Route("api/user")]
-    
+
     [ApiController]
     public class UserController : Controller
     {
+        public static IConfiguration _config;
         private IUserBL userBL;
-        public UserController(IUserBL userBL)
+        public UserController(IUserBL userBL, IConfiguration config)
         {
             this.userBL = userBL;
+            _config = config;
         }
+       
 
         // GET: api/user
         [HttpGet]
@@ -30,13 +38,14 @@ namespace FundooNotes.Controllers
             return Ok(user);
         }
         // GET: api/Employee/5
+        [Authorize]
         [HttpGet("{id}", Name = "Get")]
         public IActionResult Get(long id)
         {
             User user = userBL.Get(id);
             if (user == null)
             {
-                return NotFound("The Employee record couldn't be found.");
+                return NotFound("The User record couldn't be found.");
             }
             return Ok(user);
         }
@@ -57,18 +66,59 @@ namespace FundooNotes.Controllers
             {
                 return this.BadRequest();
             }
-            //return CreatedAtRoute(
-            //      "Get",
-            //      new { Id = user.UserId },
-            //      user);
+
+        }
+        
+        [HttpPost("login")]
+        public IActionResult LoginUser(LoginModel loginModel)
+        {
+            try
+            {
+                if (loginModel == null)
+                {
+                    return BadRequest("Employee is null.");
+                }
+                ResponseModel responseModel = userBL.Get(loginModel);
+
+                if (responseModel == null)
+                {
+                    return NotFound("The User record couldn't be found.");
+                }
+                string token = GenerateJwtToken(responseModel.UserId,responseModel.Email);
+                
+                return this.Ok(new { success = true, message = "User successfully LoggedIn",data=responseModel,jwtToken=token });
+            }
+            catch (Exception ex)
+            {
+
+                return this.BadRequest(new { success = false, message = ex.Message });
+            }
+
+
         }
 
-        
-       
-        
-    }
-        
+        [Authorize]
+        [HttpGet("demo")]
+        public IActionResult Demo()
+        {
+            return this.Ok(new { success = true, message = "HELLO" });
+        }
 
+        private static string GenerateJwtToken(long UserId,string EmailId)
+        {
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+
+            var token = new JwtSecurityToken(_config["Jwt:Issuer"],
+              _config["Jwt:Issuer"],
+              null,
+              expires: DateTime.Now.AddMinutes(120),
+              signingCredentials: credentials);
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+    }
 
 
 

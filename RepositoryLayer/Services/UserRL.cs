@@ -67,9 +67,28 @@ namespace RepositoryLayer.Services
             return _userContext.Users.FirstOrDefault(e => e.UserId == id);
         }
 
-        public User Get(LoginModel loginModel)
+        public ResponseModel Get(LoginModel loginModel)
         {
-            return _userContext.Users.FirstOrDefault(e => e.Email==loginModel.Email);
+           
+            try
+            {
+                User user = _userContext.Users.FirstOrDefault(e => e.Email == loginModel.Email && e.Password==loginModel.Password);
+                ResponseModel responseModel = new ResponseModel()
+                {
+                    UserId = user.UserId,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    Email = user.Email
+                };
+                return responseModel;
+            }
+            catch (Exception ex )
+            {
+
+                throw;
+            }
+          
+            
         }
 
         public IEnumerable<User> GetAll()

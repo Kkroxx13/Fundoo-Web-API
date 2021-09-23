@@ -11,7 +11,7 @@ namespace BusinessLibrary.Interface
         IEnumerable<User> GetAll();
 
         User Get(long id);
-        User Get(LoginModel loginModel);
+        ResponseModel Get(LoginModel loginModel);
 
         bool Add(RegisterModel user);
         bool Add(LoginModel loginModel);
