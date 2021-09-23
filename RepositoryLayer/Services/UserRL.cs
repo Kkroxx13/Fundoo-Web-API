@@ -96,6 +96,32 @@ namespace RepositoryLayer.Services
             return _userContext.Users.ToList();
         }
 
+        public bool ResetPassword(ResetPasswordModel resetPasswordModel, long userId)
+        {
+            User user = _userContext.Users.FirstOrDefault(e => e.UserId==userId);
+
+            try
+            {
+                
+                user.Password = resetPasswordModel.newPassword;
+                _userContext.Users.Update(user);
+                int result = _userContext.SaveChanges();
+                if (result > 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+
+            }
+            catch(Exception ex)
+            {
+                return false;
+            }
+        }
+
         //public void Update(User user, User user1)
         //{
         //    user.FirstName = user1.FirstName;

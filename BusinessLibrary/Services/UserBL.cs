@@ -75,6 +75,18 @@ namespace BusinessLibrary.Services
                 throw;
             }
         }
+
+        public bool ResetPassword(ResetPasswordModel resetPasswordModel, long userId)
+        {
+            try
+            {
+                return this._userRL.ResetPassword(resetPasswordModel,userId);
+            }
+            catch(Exception ex)
+            {
+                throw;
+            }
+        }
     }
 
 }

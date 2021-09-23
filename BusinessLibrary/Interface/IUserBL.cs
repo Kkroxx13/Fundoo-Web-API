@@ -15,5 +15,7 @@ namespace BusinessLibrary.Interface
 
         bool Add(RegisterModel user);
         bool Add(LoginModel loginModel);
+
+        bool ResetPassword(ResetPasswordModel resetPasswordModel,long userId);
     }
 }

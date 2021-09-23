@@ -14,5 +14,6 @@ namespace RepositoryLayer.Interface
         ResponseModel Get(LoginModel loginModel);
         bool Add(RegisterModel user);
         bool Add(LoginModel loginModel);
+        bool ResetPassword(ResetPasswordModel resetPasswordModel, long userId);
     }
 }

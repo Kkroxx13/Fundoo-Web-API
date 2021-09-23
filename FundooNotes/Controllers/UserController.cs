@@ -13,6 +13,7 @@ using System.Text;
 using Microsoft.Extensions.Configuration;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace FundooNotes.Controllers
 {
@@ -109,15 +110,54 @@ namespace FundooNotes.Controllers
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
+            var permClaims = new List<Claim>();
+            permClaims.Add(new Claim("Id", UserId.ToString()));
+            permClaims.Add(new Claim(ClaimTypes.Email, EmailId));
+           
             var token = new JwtSecurityToken(_config["Jwt:Issuer"],
               _config["Jwt:Issuer"],
-              null,
+              permClaims,
               expires: DateTime.Now.AddMinutes(120),
               signingCredentials: credentials);
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
+        [Authorize]
+        [HttpPut("resetpassword")]
+        public  IActionResult ResetPassword(ResetPasswordModel resetPasswordModel)
+        {
+            try
+            {
+                if (resetPasswordModel.newPassword == resetPasswordModel.confirmPassword)
+                {
+                    long userId = GetTokenId();
+                    var result = userBL.ResetPassword(resetPasswordModel, userId);
+                    if (result == true)
+                    {
+                        return this.Ok(new { success = true, message = "Password reset successfull" });
+                    }
+                    else
+                    {
+                        return this.BadRequest(new { success = false, message = "Password not matching,Enter again!" });
+                    }
+                }
+                else
+                {
+                    return this.BadRequest(new { success = false, message = "Password not matching,Enter again!" });
+                }
+            }
+            catch(Exception ex)
+            {
+                return this.BadRequest(new { success = false, message = ex.Message });
+            }
+            
+        }
+
+        public  long GetTokenId()
+        {
+            return   Convert.ToInt64(User.FindFirst("Id").Value);
+        }
     }
 
 
