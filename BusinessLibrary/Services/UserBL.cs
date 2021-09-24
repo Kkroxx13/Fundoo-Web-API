@@ -40,6 +40,18 @@ namespace BusinessLibrary.Services
             }
         }
 
+        public ResponseModel ForgotPassword(ForgotPasswordModel model)
+        {
+            try
+            {
+                return this._userRL.ForgotPassword(model);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
         public User Get(long id)
         {
             try

@@ -13,6 +13,7 @@ namespace FundooNotes
     {
         public static void Main(string[] args)
         {
+            System.Net.ServicePointManager.SecurityProtocol = (System.Net.SecurityProtocolType)(768 | 3072);
             CreateHostBuilder(args).Build().Run();
         }
 

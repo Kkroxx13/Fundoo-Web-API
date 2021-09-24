@@ -56,6 +56,33 @@ namespace RepositoryLayer.Services
             }
         }
 
+        public ResponseModel ForgotPassword(ForgotPasswordModel model)
+        {
+            try
+            {
+                User user = _userContext.Users.FirstOrDefault(e => e.Email == model.Email);
+                if (user != null)
+                {
+                    ResponseModel response = new ResponseModel();
+                    response.Email = user.Email;
+                    response.UserId = user.UserId;
+                    response.FirstName = user.FirstName;
+                    response.LastName = user.LastName;
+                    return response;
+                }
+                else
+                {
+                    return null;
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
+
         //public void Delete(User user)
         //{
         //    _userContext.Users.Remove(user);

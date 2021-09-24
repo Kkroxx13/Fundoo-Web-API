@@ -14,6 +14,7 @@ using Microsoft.Extensions.Configuration;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
+using CommonLayer;
 
 namespace FundooNotes.Controllers
 {
@@ -29,7 +30,7 @@ namespace FundooNotes.Controllers
             this.userBL = userBL;
             _config = config;
         }
-       
+
 
         // GET: api/user
         [HttpGet]
@@ -69,7 +70,7 @@ namespace FundooNotes.Controllers
             }
 
         }
-        
+
         [HttpPost("login")]
         public IActionResult LoginUser(LoginModel loginModel)
         {
@@ -85,9 +86,9 @@ namespace FundooNotes.Controllers
                 {
                     return NotFound("The User record couldn't be found.");
                 }
-                string token = GenerateJwtToken(responseModel.UserId,responseModel.Email);
-                
-                return this.Ok(new { success = true, message = "User successfully LoggedIn",data=responseModel,jwtToken=token });
+                string token = GenerateJwtToken(responseModel.UserId, responseModel.Email);
+
+                return this.Ok(new { success = true, message = "User successfully LoggedIn", data = responseModel, jwtToken = token });
             }
             catch (Exception ex)
             {
@@ -105,7 +106,7 @@ namespace FundooNotes.Controllers
             return this.Ok(new { success = true, message = "HELLO" });
         }
 
-        private static string GenerateJwtToken(long UserId,string EmailId)
+        private static string GenerateJwtToken(long UserId, string EmailId)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
@@ -113,7 +114,7 @@ namespace FundooNotes.Controllers
             var permClaims = new List<Claim>();
             permClaims.Add(new Claim("Id", UserId.ToString()));
             permClaims.Add(new Claim(ClaimTypes.Email, EmailId));
-           
+
             var token = new JwtSecurityToken(_config["Jwt:Issuer"],
               _config["Jwt:Issuer"],
               permClaims,
@@ -125,7 +126,7 @@ namespace FundooNotes.Controllers
 
         [Authorize]
         [HttpPut("resetpassword")]
-        public  IActionResult ResetPassword(ResetPasswordModel resetPasswordModel)
+        public IActionResult ResetPassword(ResetPasswordModel resetPasswordModel)
         {
             try
             {
@@ -147,49 +148,76 @@ namespace FundooNotes.Controllers
                     return this.BadRequest(new { success = false, message = "Password not matching,Enter again!" });
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return this.BadRequest(new { success = false, message = ex.Message });
             }
-            
+
         }
 
-        public  long GetTokenId()
+        public long GetTokenId()
         {
-            return   Convert.ToInt64(User.FindFirst("Id").Value);
+            return Convert.ToInt64(User.FindFirst("Id").Value);
+        }
+
+        [HttpPost("forgot/password")]
+
+        public IActionResult ForgotPassword(ForgotPasswordModel model)
+        {
+            try
+            {
+                ResponseModel response = userBL.ForgotPassword(model);
+                if (response.FirstName == null && response.LastName == null )
+                {
+                    return this.NotFound(new { success = false, message = "The mail is not valid" });
+                }
+                else
+                {
+                    string token = GenerateJwtToken(response.UserId, response.Email);
+                    new MsmqOperation().SendData(token);
+
+                    return Ok(new { success = true, message = "The Reset Password  Link has been sent to you succesfully" });
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return this.BadRequest(new { success = false, message = ex.Message });
+            }
+
+
+
+
+            // PUT: api/Employee/5
+            //[HttpPut("{id}")]
+            //public IActionResult Put(long id, [FromBody] User user)
+            //{
+            //    if (user == null)
+            //    {
+            //        return BadRequest("Employee is null.");
+            //    }
+            //    User userToUpdate = userBL.Get(id);
+            //    if (userToUpdate == null)
+            //    {
+            //        return NotFound("The Employee record couldn't be found.");
+            //    }
+            //    userBL.Update(userToUpdate, user);
+            //    return NoContent();
+            //}
+            // DELETE: api/Employee/5
+            //[HttpDelete("{id}")]
+            //public IActionResult Delete(long id)
+            //{
+            //    User user = userBL.Get(id);
+            //    if (user == null)
+            //    {
+            //        return NotFound("The Employee record couldn't be found.");
+            //    }
+            //    userBL.Delete(user);
+            //    return NoContent();
+            //}
+
         }
     }
-
-
-
-
-        // PUT: api/Employee/5
-        //[HttpPut("{id}")]
-        //public IActionResult Put(long id, [FromBody] User user)
-        //{
-        //    if (user == null)
-        //    {
-        //        return BadRequest("Employee is null.");
-        //    }
-        //    User userToUpdate = userBL.Get(id);
-        //    if (userToUpdate == null)
-        //    {
-        //        return NotFound("The Employee record couldn't be found.");
-        //    }
-        //    userBL.Update(userToUpdate, user);
-        //    return NoContent();
-        //}
-        // DELETE: api/Employee/5
-        //[HttpDelete("{id}")]
-        //public IActionResult Delete(long id)
-        //{
-        //    User user = userBL.Get(id);
-        //    if (user == null)
-        //    {
-        //        return NotFound("The Employee record couldn't be found.");
-        //    }
-        //    userBL.Delete(user);
-        //    return NoContent();
-        //}
-    
 }
