@@ -16,11 +16,11 @@ namespace BusinessLibrary.Services
             this._userRL = userRL;
         }
 
-        public bool Add(RegisterModel user)
+        public bool Register(RegisterModel user)
         {
             try
             {
-                return this._userRL.Add(user);
+                return this._userRL.Register(user);
             }
             catch (Exception ex)
             {
@@ -28,17 +28,17 @@ namespace BusinessLibrary.Services
             }
         }
 
-        public bool Add(LoginModel loginModel)
-        {
-            try
-            {
-                return this._userRL.Add(loginModel);
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
-        }
+        //public bool Add(LoginModel loginModel)
+        //{
+        //    try
+        //    {
+        //        return this._userRL.Add(loginModel);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw;
+        //    }
+        //}
 
         public ResponseModel ForgotPassword(ForgotPasswordModel model)
         {
@@ -64,11 +64,11 @@ namespace BusinessLibrary.Services
             }
         }
 
-        public ResponseModel Get(LoginModel loginModel)
+        public ResponseModel Login(LoginModel loginModel)
         {
             try
             {
-                return this._userRL.Get(loginModel);
+                return this._userRL.Login(loginModel);
             }
             catch(Exception ex)
             {

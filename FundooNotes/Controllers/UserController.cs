@@ -39,27 +39,16 @@ namespace FundooNotes.Controllers
             IEnumerable<User> user = userBL.GetAll();
             return Ok(user);
         }
-        // GET: api/Employee/5
-        [Authorize]
-        [HttpGet("{id}", Name = "Get")]
-        public IActionResult Get(long id)
-        {
-            User user = userBL.Get(id);
-            if (user == null)
-            {
-                return NotFound("The User record couldn't be found.");
-            }
-            return Ok(user);
-        }
+        
         // POST: api/user
-        [HttpPost]
-        public IActionResult Post(RegisterModel user)
+        [HttpPost("register")]
+        public IActionResult Register(RegisterModel user)
         {
             if (user == null)
             {
                 return BadRequest("Employee is null.");
             }
-            var result = userBL.Add(user);
+            var result = userBL.Register(user);
             if (result == true)
             {
                 return this.Ok(new { success = true, message = "User successfully Registered" });
@@ -80,7 +69,7 @@ namespace FundooNotes.Controllers
                 {
                     return BadRequest("Employee is null.");
                 }
-                ResponseModel responseModel = userBL.Get(loginModel);
+                ResponseModel responseModel = userBL.Login(loginModel);
 
                 if (responseModel == null)
                 {
@@ -155,12 +144,13 @@ namespace FundooNotes.Controllers
 
         }
 
+        [HttpGet("gettokenid")]
         public long GetTokenId()
         {
             return Convert.ToInt64(User.FindFirst("Id").Value);
         }
 
-        [HttpPost("forgot/password")]
+        [HttpPost("forgotpassword")]
 
         public IActionResult ForgotPassword(ForgotPasswordModel model)
         {
@@ -189,35 +179,7 @@ namespace FundooNotes.Controllers
 
 
 
-            // PUT: api/Employee/5
-            //[HttpPut("{id}")]
-            //public IActionResult Put(long id, [FromBody] User user)
-            //{
-            //    if (user == null)
-            //    {
-            //        return BadRequest("Employee is null.");
-            //    }
-            //    User userToUpdate = userBL.Get(id);
-            //    if (userToUpdate == null)
-            //    {
-            //        return NotFound("The Employee record couldn't be found.");
-            //    }
-            //    userBL.Update(userToUpdate, user);
-            //    return NoContent();
-            //}
-            // DELETE: api/Employee/5
-            //[HttpDelete("{id}")]
-            //public IActionResult Delete(long id)
-            //{
-            //    User user = userBL.Get(id);
-            //    if (user == null)
-            //    {
-            //        return NotFound("The Employee record couldn't be found.");
-            //    }
-            //    userBL.Delete(user);
-            //    return NoContent();
-            //}
-
+            
         }
     }
 }

@@ -17,7 +17,7 @@ namespace RepositoryLayer.Services
         {
             _userContext = context;
         }
-        public bool Add(RegisterModel user)
+        public bool Register(RegisterModel user)
         {
             User userEntity = new User();
             userEntity.FirstName = user.FirstName;
@@ -37,24 +37,24 @@ namespace RepositoryLayer.Services
             }
         }
 
-        public bool Add(LoginModel loginModel)
-        {
-            User userEntity = new User();
+        //public bool Add(LoginModel loginModel)
+        //{
+        //    User userEntity = new User();
            
-            userEntity.Email = loginModel.Email;
-            userEntity.Password = loginModel.Password;
+        //    userEntity.Email = loginModel.Email;
+        //    userEntity.Password = loginModel.Password;
            
-            _userContext.Users.Add(userEntity);
-            int result = _userContext.SaveChanges();
-            if (result > 0)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
+        //    _userContext.Users.Add(userEntity);
+        //    int result = _userContext.SaveChanges();
+        //    if (result > 0)
+        //    {
+        //        return true;
+        //    }
+        //    else
+        //    {
+        //        return false;
+        //    }
+        //}
 
         public ResponseModel ForgotPassword(ForgotPasswordModel model)
         {
@@ -94,7 +94,7 @@ namespace RepositoryLayer.Services
             return _userContext.Users.FirstOrDefault(e => e.UserId == id);
         }
 
-        public ResponseModel Get(LoginModel loginModel)
+        public ResponseModel Login(LoginModel loginModel)
         {
            
             try

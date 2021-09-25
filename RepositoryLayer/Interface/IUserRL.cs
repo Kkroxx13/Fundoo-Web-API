@@ -11,9 +11,8 @@ namespace RepositoryLayer.Interface
     {
         IEnumerable<User> GetAll();
         User Get(long id);
-        ResponseModel Get(LoginModel loginModel);
-        bool Add(RegisterModel user);
-        bool Add(LoginModel loginModel);
+        ResponseModel Login(LoginModel loginModel);
+        bool Register(RegisterModel user);        
         bool ResetPassword(ResetPasswordModel resetPasswordModel, long userId);
         ResponseModel ForgotPassword(ForgotPasswordModel model);
     }
