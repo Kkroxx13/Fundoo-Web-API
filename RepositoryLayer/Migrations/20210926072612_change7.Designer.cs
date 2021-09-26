@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RepositoryLayer.Context;
 
 namespace RepositoryLayer.Migrations
 {
     [DbContext(typeof(UserContext))]
-    partial class UserContextModelSnapshot : ModelSnapshot
+    [Migration("20210926072612_change7")]
+    partial class change7
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -74,14 +76,14 @@ namespace RepositoryLayer.Migrations
                             Id = 1,
                             AddReminder = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Color = "White",
-                            CreatedDate = new DateTime(2021, 9, 26, 13, 8, 5, 201, DateTimeKind.Local).AddTicks(4855),
+                            CreatedDate = new DateTime(2021, 9, 26, 12, 56, 12, 333, DateTimeKind.Local).AddTicks(3733),
                             Image = "abc.jpg",
                             IsArchive = false,
                             IsNote = true,
                             IsPin = false,
                             IsTrash = false,
                             Message = "Hello, this is my new note",
-                            ModifiedDate = new DateTime(2021, 9, 26, 13, 8, 5, 203, DateTimeKind.Local).AddTicks(643),
+                            ModifiedDate = new DateTime(2021, 9, 26, 12, 56, 12, 334, DateTimeKind.Local).AddTicks(7254),
                             Title = "New Note",
                             UserId = 15L
                         });

@@ -1,5 +1,6 @@
 ﻿
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Migrations;
 using RepositoryLayer.Entity;
 using System;
 using System.Collections.Generic;
@@ -17,12 +18,17 @@ namespace RepositoryLayer.Context
 
         }
         public DbSet<User> Users { get; set; }
+        public DbSet<Notes> Notes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>()
                .HasIndex(u => u.Email)
                .IsUnique();
+            
+            
+           
+
 
             modelBuilder.Entity<User>().HasData(new User
             {
@@ -45,9 +51,30 @@ namespace RepositoryLayer.Context
                 ModifiedAt = new DateTime(2020, 02, 02)
             });
 
+            modelBuilder.Entity<Notes>().HasData(new Entity.Notes
+            {
+                Id = 1,
+                Title = "New Note",
+                Message = "Hello, this is my new note",
+                Image = "abc.jpg",
+                Color = "White",
+                IsPin = false,
+                CreatedDate = DateTime.Now,
+                ModifiedDate=DateTime.Now,
+                AddReminder=DateTime.MinValue,
+                UserId=15,
+                IsArchive=false,
+                IsNote=true,
+                IsTrash=false
+
+            }); 
+
 
         }
+
         
+
+
     }
     
 }

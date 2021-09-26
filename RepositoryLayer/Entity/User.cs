@@ -8,18 +8,20 @@ using System.Text;
 
 namespace RepositoryLayer.Entity
 {
-    
-   public class User
+
+    public class User
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public long UserId { get; set; }   
-        public string FirstName { get; set; }    
-        public string LastName { get; set; }       
+        public long UserId { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
-        public DateTime  CreatedAt { get; set; }
+        public DateTime CreatedAt { get; set; }
         public DateTime ModifiedAt { get; set; }
 
+        public virtual ICollection<Notes> Notes { get; set; }
     }
+       
 }
