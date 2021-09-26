@@ -10,5 +10,7 @@ namespace BusinessLayer.Interface
     {
         bool CreateNotes(AddNotesRequestModel model);
         IEnumerable<Notes> DisplayNotes();
+        Notes Get(long Id);
+        bool Delete(Notes notes);
     }
 }

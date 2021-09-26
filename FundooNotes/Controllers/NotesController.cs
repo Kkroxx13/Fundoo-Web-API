@@ -44,6 +44,29 @@ namespace FundooNotes.Controllers
             {
                 return this.BadRequest();
             }
+
+        }
+
+        [HttpDelete("deletenotes/{Id}")]
+        public IActionResult DeleteNotes(long Id)
+        {
+            Notes notes = _notesBL.Get(Id);
+            if (notes == null)
+            {
+                return NotFound("The Employee record couldn't be found.");
+            }
+            var result = _notesBL.Delete(notes);
+
+            if (result == true)
+            {
+                return this.Ok(new { success = true, message = "Notes Deleted Successfully" });
+            }
+            else
+            {
+                return this.BadRequest(new { success = false, message = "Note Deletion Failed" });
+            }
+
+
         }
     }
 }
