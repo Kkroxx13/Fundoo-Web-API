@@ -44,7 +44,7 @@ namespace RepositoryLayer.Services
             }
         }
 
-        public IEnumerable<Notes> GetAll()
+        public IEnumerable<Notes> DisplayNotes()
         {
             return _userContext.Notes.ToList();
         }

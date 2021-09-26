@@ -9,6 +9,6 @@ namespace RepositoryLayer.Interface
     public interface INotesRL
     {
         bool CreateNotes(AddNotesRequestModel model);
-        IEnumerable<Notes> GetAll();
+        IEnumerable<Notes> DisplayNotes();
     }
 }

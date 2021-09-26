@@ -22,9 +22,9 @@ namespace FundooNotes.Controllers
         }
 
         [HttpGet("getnotes")]
-        public IActionResult GetAll()
+        public IActionResult DisplayNotes()
         {
-            IEnumerable<Notes> notes = _notesBL.GetAll();
+            IEnumerable<Notes> notes = _notesBL.DisplayNotes();
             return Ok(notes);
         }
 

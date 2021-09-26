@@ -9,6 +9,6 @@ namespace BusinessLayer.Interface
    public interface INotesBL
     {
         bool CreateNotes(AddNotesRequestModel model);
-        IEnumerable<Notes> GetAll();
+        IEnumerable<Notes> DisplayNotes();
     }
 }
