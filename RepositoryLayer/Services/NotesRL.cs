@@ -149,5 +149,59 @@ namespace RepositoryLayer.Services
                 return false;
             }
         }
+
+        public bool PinNote(long Id)
+        {
+            Notes notes = _userContext.Notes.FirstOrDefault(e => e.Id == Id);
+            if (notes.IsPin == false)
+            {
+
+                notes.IsPin = true;
+
+            }
+            else
+            {
+
+                notes.IsPin = false;
+
+            }
+            _userContext.Notes.Update(notes);
+            int result = _userContext.SaveChanges();
+            if (result > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public bool TrashNote(long Id)
+        {
+            Notes notes = _userContext.Notes.FirstOrDefault(e => e.Id == Id);
+            if (notes.IsTrash == false)
+            {
+
+                notes.IsTrash = true;
+
+            }
+            else
+            {
+
+                notes.IsTrash = false;
+
+            }
+            _userContext.Notes.Update(notes);
+            int result = _userContext.SaveChanges();
+            if (result > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }

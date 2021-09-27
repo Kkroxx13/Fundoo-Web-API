@@ -15,5 +15,7 @@ namespace RepositoryLayer.Interface
         bool EditNotes(EditNotesModel editNotesModel, long Id);
         bool ArchiveNote(IsArchiveModel isArchiveModel, long Id);
         bool ChangeColor(long Id, ChangeColorModel changeColorModel);
+        bool PinNote(long Id);
+        bool TrashNote(long Id);
     }
 }

@@ -120,5 +120,33 @@ namespace FundooNotes.Controllers
             }
         }
 
+
+        [HttpPut("pinnote/{Id}")]
+        public IActionResult PinNote( long Id)
+        {
+            var result = _notesBL.PinNote( Id);
+            if (result == true)
+            {
+                return this.Ok(new { success = true, message = "IsPin function successfull" });
+            }
+            else
+            {
+                return this.BadRequest(new { success = false, message = "IsPin function unsuccessfull" });
+            }
+        }
+
+        [HttpPut("trashnote/{Id}")]
+        public IActionResult TrashNote(long Id)
+        {
+            var result = _notesBL.TrashNote(Id);
+            if (result == true)
+            {
+                return this.Ok(new { success = true, message = "IsTrash function successfull" });
+            }
+            else
+            {
+                return this.BadRequest(new { success = false, message = "IsTrash function unsuccessfull" });
+            }
+        }
     }
 }
