@@ -106,5 +106,19 @@ namespace FundooNotes.Controllers
             }
         }
 
+        [HttpPut("changecolor/{Id}")]
+        public IActionResult ChangeColor(long Id, ChangeColorModel changeColorModel)
+        {
+            var result = _notesBL.ChangeColor(Id, changeColorModel);
+            if (result == true)
+            {
+                return this.Ok(new { success = true, message = "Color change successfull" });
+            }
+            else
+            {
+                return this.BadRequest(new { success = false, message = "Color Change unsuccessfull" });
+            }
+        }
+
     }
 }
