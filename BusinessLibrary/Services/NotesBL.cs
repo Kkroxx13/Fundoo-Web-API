@@ -15,6 +15,9 @@ namespace BusinessLayer.Services
         {
             _notesRL = notesRL;
         }
+
+        
+
         public bool CreateNotes(AddNotesRequestModel model)
         {
             return _notesRL.CreateNotes(model);
@@ -44,11 +47,35 @@ namespace BusinessLayer.Services
             }
         }
 
+        public bool EditNotes(EditNotesModel editNotesModel, long Id)
+        {
+            try
+            {
+                return this._notesRL.EditNotes(editNotesModel,Id);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
         public Notes Get(long Id)
         {
             try
             {
                 return this._notesRL.Get(Id);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        public bool ArchiveNote(IsArchiveModel isArchiveModel, long Id)
+        {
+            try
+            {
+                return this._notesRL.ArchiveNote(isArchiveModel,Id);
             }
             catch (Exception ex)
             {

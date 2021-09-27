@@ -2,10 +2,15 @@
 using BusinessLayer.Services;
 using CommonLayer.Model.NotesModel;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using RepositoryLayer.Entity;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace FundooNotes.Controllers
@@ -15,13 +20,15 @@ namespace FundooNotes.Controllers
     [ApiController]
     public class NotesController : Controller
     {
+        public static IConfiguration _config;
         private readonly INotesBL _notesBL;
-        public NotesController(INotesBL notesBL)
+        public NotesController(INotesBL notesBL, IConfiguration config)
         {
             _notesBL = notesBL;
+            _config = config;
         }
 
-        [HttpGet("getnotes")]
+        [HttpGet("displaynotes")]
         public IActionResult DisplayNotes()
         {
             IEnumerable<Notes> notes = _notesBL.DisplayNotes();
@@ -68,5 +75,36 @@ namespace FundooNotes.Controllers
 
 
         }
+
+        [HttpPut("editnotes/{Id}")]
+        public IActionResult EditNotes(EditNotesModel editNotesModel,long Id)
+        {
+           
+            var result = _notesBL.EditNotes(editNotesModel, Id);
+            if (result == true)
+            {
+                return this.Ok(new { success = true, message = "Notes Edited Successfully" });
+            }
+            else
+            {
+                return this.BadRequest(new { success = false, message = "Note Updation Failed" });
+            }
+
+        }
+
+        [HttpPut("archive/{Id}")]
+        public IActionResult ArchiveNote(IsArchiveModel isArchiveModel,long Id)
+        {
+            var result = _notesBL.ArchiveNote(isArchiveModel, Id);
+            if (result == true)
+            {
+                return this.Ok(new { success = true, message = "IsArchive function successfull" });
+            }
+            else
+            {
+                return this.BadRequest(new { success = false, message = "IsArchive function unsuccessfull" });
+            }
+        }
+
     }
 }
