@@ -213,11 +213,12 @@ namespace FundooNotes.Controllers
             }
         }
 
-        [HttpPut("{Id}/addreminder")]
-        public IActionResult AddReminder(long Id, AddReminderModel addReminderModel)
+        [HttpPut("addreminder")]
+        public IActionResult AddReminder( AddReminderModel addReminderModel)
         {
             try
             {
+                var Id = GetTokenId();
                 var result = _notesBL.AddReminder(Id, addReminderModel);
                 if (result == true)
                 {
@@ -237,6 +238,23 @@ namespace FundooNotes.Controllers
         public long GetTokenId()
         {
             return Convert.ToInt64(User.FindFirst("Id").Value);
+        }
+        private static string GenerateJwtToken(long UserId, string EmailId)
+        {
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+
+            var permClaims = new List<Claim>();
+            permClaims.Add(new Claim("Id", UserId.ToString()));
+            permClaims.Add(new Claim(ClaimTypes.Email, EmailId));
+
+            var token = new JwtSecurityToken(_config["Jwt:Issuer"],
+              _config["Jwt:Issuer"],
+              permClaims,
+              expires: DateTime.Now.AddMinutes(120),
+              signingCredentials: credentials);
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }
 }
