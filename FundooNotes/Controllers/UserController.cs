@@ -36,26 +36,42 @@ namespace FundooNotes.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            IEnumerable<User> user = userBL.GetAll();
-            return Ok(user);
+            try
+            {
+                IEnumerable<User> user = userBL.GetAll();
+                return Ok(user);
+            }
+            catch (Exception ex)
+            {
+
+                return this.BadRequest(new { success = false, message = ex.Message });
+            }
         }
         
         // POST: api/user
         [HttpPost("register")]
         public IActionResult Register(RegisterModel user)
         {
-            if (user == null)
+            try
             {
-                return BadRequest("Employee is null.");
+                if (user == null)
+                {
+                    return BadRequest("Employee is null.");
+                }
+                var result = userBL.Register(user);
+                if (result == true)
+                {
+                    return this.Ok(new { success = true, message = "User successfully Registered" });
+                }
+                else
+                {
+                    return this.BadRequest();
+                }
             }
-            var result = userBL.Register(user);
-            if (result == true)
+            catch (Exception ex)
             {
-                return this.Ok(new { success = true, message = "User successfully Registered" });
-            }
-            else
-            {
-                return this.BadRequest();
+
+                return this.BadRequest(new { success = false, message = ex.Message });
             }
 
         }
@@ -88,12 +104,7 @@ namespace FundooNotes.Controllers
 
         }
 
-        [Authorize]
-        [HttpGet("demo")]
-        public IActionResult Demo()
-        {
-            return this.Ok(new { success = true, message = "HELLO" });
-        }
+        
 
         private static string GenerateJwtToken(long UserId, string EmailId)
         {

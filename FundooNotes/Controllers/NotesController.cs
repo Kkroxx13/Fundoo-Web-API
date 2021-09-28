@@ -28,125 +28,215 @@ namespace FundooNotes.Controllers
             _config = config;
         }
 
-        [HttpGet("displaynotes")]
+        [HttpGet]
         public IActionResult DisplayNotes()
         {
-            IEnumerable<Notes> notes = _notesBL.DisplayNotes();
-            return Ok(notes);
+            try
+            {
+                IEnumerable<Notes> notes = _notesBL.DisplayNotes();
+                return Ok(notes);
+            }
+            catch (Exception ex)
+            {
+
+                return this.BadRequest(new { success = false, message = ex.Message });
+            }
         }
 
-        [HttpPost("createnotes")]
+        [HttpPost]
         public IActionResult CreateNotes(AddNotesRequestModel model)
         {
-            if (model == null)
+            try
             {
-                return BadRequest("Employee is null.");
+                if (model == null)
+                {
+                    return BadRequest("Employee is null.");
+                }
+                var result = _notesBL.CreateNotes(model);
+                if (result == true)
+                {
+                    return this.Ok(new { success = true, message = "Note Created Successfully" });
+                }
+                else
+                {
+                    return this.BadRequest();
+                }
             }
-            var result = _notesBL.CreateNotes(model);
-            if (result == true)
+            catch (Exception ex)
             {
-                return this.Ok(new { success = true, message = "Note Created Successfully" });
-            }
-            else
-            {
-                return this.BadRequest();
+
+                return this.BadRequest(new { success = false, message = ex.Message });
             }
 
         }
 
-        [HttpDelete("deletenotes/{Id}")]
+        [HttpDelete("{Id}")]
         public IActionResult DeleteNotes(long Id)
         {
-            Notes notes = _notesBL.Get(Id);
-            if (notes == null)
+            try
             {
-                return NotFound("The Employee record couldn't be found.");
-            }
-            var result = _notesBL.Delete(notes);
+                Notes notes = _notesBL.Get(Id);
+                if (notes == null)
+                {
+                    return NotFound("The Employee record couldn't be found.");
+                }
+                var result = _notesBL.Delete(notes);
 
-            if (result == true)
-            {
-                return this.Ok(new { success = true, message = "Notes Deleted Successfully" });
+                if (result == true)
+                {
+                    return this.Ok(new { success = true, message = "Notes Deleted Successfully" });
+                }
+                else
+                {
+                    return this.BadRequest(new { success = false, message = "Note Deletion Failed" });
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return this.BadRequest(new { success = false, message = "Note Deletion Failed" });
+
+                return this.BadRequest(new { success = false, message = ex.Message });
             }
 
 
         }
 
-        [HttpPut("editnotes/{Id}")]
+        [HttpPut("{Id}")]
         public IActionResult EditNotes(EditNotesModel editNotesModel,long Id)
         {
-           
-            var result = _notesBL.EditNotes(editNotesModel, Id);
-            if (result == true)
+
+            try
             {
-                return this.Ok(new { success = true, message = "Notes Edited Successfully" });
+                var result = _notesBL.EditNotes(editNotesModel, Id);
+                if (result == true)
+                {
+                    return this.Ok(new { success = true, message = "Notes Edited Successfully" });
+                }
+                else
+                {
+                    return this.BadRequest(new { success = false, message = "Note Updation Failed" });
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return this.BadRequest(new { success = false, message = "Note Updation Failed" });
+
+                return this.BadRequest(new { success = false, message = ex.Message });
             }
 
         }
 
-        [HttpPut("archive/{Id}")]
+        [HttpPut("{Id}/arcive")]
         public IActionResult ArchiveNote(IsArchiveModel isArchiveModel,long Id)
         {
-            var result = _notesBL.ArchiveNote(isArchiveModel, Id);
-            if (result == true)
+            try
             {
-                return this.Ok(new { success = true, message = "IsArchive function successfull" });
+                var result = _notesBL.ArchiveNote(isArchiveModel, Id);
+                if (result == true)
+                {
+                    return this.Ok(new { success = true, message = "IsArchive function successfull" });
+                }
+                else
+                {
+                    return this.BadRequest(new { success = false, message = "IsArchive function unsuccessfull" });
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return this.BadRequest(new { success = false, message = "IsArchive function unsuccessfull" });
+
+                return this.BadRequest(new { success = false, message = ex.Message });
             }
         }
 
-        [HttpPut("changecolor/{Id}")]
+        [HttpPut("{Id}/changecolor")]
         public IActionResult ChangeColor(long Id, ChangeColorModel changeColorModel)
         {
-            var result = _notesBL.ChangeColor(Id, changeColorModel);
-            if (result == true)
+            try
             {
-                return this.Ok(new { success = true, message = "Color change successfull" });
+                var result = _notesBL.ChangeColor(Id, changeColorModel);
+                if (result == true)
+                {
+                    return this.Ok(new { success = true, message = "Color change successfull" });
+                }
+                else
+                {
+                    return this.BadRequest(new { success = false, message = "Color Change unsuccessfull" });
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return this.BadRequest(new { success = false, message = "Color Change unsuccessfull" });
+
+                return this.BadRequest(new { success = false, message = ex.Message });
             }
         }
 
 
-        [HttpPut("pinnote/{Id}")]
+        [HttpPut("{Id}/pinnote")]
         public IActionResult PinNote( long Id)
         {
-            var result = _notesBL.PinNote( Id);
-            if (result == true)
+            try
             {
-                return this.Ok(new { success = true, message = "IsPin function successfull" });
+                var result = _notesBL.PinNote(Id);
+                if (result == true)
+                {
+                    return this.Ok(new { success = true, message = "IsPin function successfull" });
+                }
+                else
+                {
+                    return this.BadRequest(new { success = false, message = "IsPin function unsuccessfull" });
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return this.BadRequest(new { success = false, message = "IsPin function unsuccessfull" });
+
+                return this.BadRequest(new { success = false, message = ex.Message });
             }
         }
 
-        [HttpPut("trashnote/{Id}")]
+        [HttpPut("{Id}/trashnote")]
         public IActionResult TrashNote(long Id)
         {
-            var result = _notesBL.TrashNote(Id);
-            if (result == true)
+            try
             {
-                return this.Ok(new { success = true, message = "IsTrash function successfull" });
+                var result = _notesBL.TrashNote(Id);
+                if (result == true)
+                {
+                    return this.Ok(new { success = true, message = "IsTrash function successfull" });
+                }
+                else
+                {
+                    return this.BadRequest(new { success = false, message = "IsTrash function unsuccessfull" });
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return this.BadRequest(new { success = false, message = "IsTrash function unsuccessfull" });
+
+                return this.BadRequest(new { success = false, message = ex.Message });
             }
+        }
+
+        [HttpPut("{Id}/addreminder")]
+        public IActionResult AddReminder(long Id, AddReminderModel addReminderModel)
+        {
+            try
+            {
+                var result = _notesBL.AddReminder(Id, addReminderModel);
+                if (result == true)
+                {
+                    return this.Ok(new { success = true, message = "Reminder Added Successfully " });
+                }
+                else
+                {
+                    return this.BadRequest(new { success = false, message = "Reminder adding unsuccessfull" });
+                }
+            }
+            catch (Exception ex)
+            {
+
+                return this.BadRequest(new { success = false, message = ex.Message });
+            }
+        }
+        public long GetTokenId()
+        {
+            return Convert.ToInt64(User.FindFirst("Id").Value);
         }
     }
 }

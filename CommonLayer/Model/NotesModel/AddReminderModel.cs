@@ -5,9 +5,11 @@ using System.Text;
 
 namespace CommonLayer.Model.NotesModel
 {
-    public class DeleteNotesModel
+    public class AddReminderModel
     {
         [Required]
-        public int Id { get; set; }
+        public DateTime AddReminder { get; set; }
+        [Required]
+        public DateTime ModifiedDate { get; set; }
     }
 }

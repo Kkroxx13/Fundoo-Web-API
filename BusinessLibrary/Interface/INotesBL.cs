@@ -17,5 +17,7 @@ namespace BusinessLayer.Interface
         bool ChangeColor(long Id, ChangeColorModel changeColorModel);
         bool PinNote(long Id);
         bool TrashNote(long Id);
+        
+        bool AddReminder(long Id, AddReminderModel addReminderModel);
     }
 }

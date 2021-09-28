@@ -19,42 +19,33 @@ namespace RepositoryLayer.Services
         }
         public bool Register(RegisterModel user)
         {
-            User userEntity = new User();
-            userEntity.FirstName = user.FirstName;
-            userEntity.LastName = user.LastName;
-            userEntity.Email = user.Email;
-            userEntity.Password = user.Password;
-            userEntity.CreatedAt = DateTime.Now;
-            _userContext.Users.Add(userEntity);
-            int result=_userContext.SaveChanges();
-            if (result > 0)
+            try
             {
-                return true;
+                User userEntity = new User();
+                userEntity.FirstName = user.FirstName;
+                userEntity.LastName = user.LastName;
+                userEntity.Email = user.Email;
+                userEntity.Password = user.Password;
+                userEntity.CreatedAt = DateTime.Now;
+                _userContext.Users.Add(userEntity);
+                int result = _userContext.SaveChanges();
+                if (result > 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
-            else
+            catch (Exception ex)
             {
+
                 return false;
             }
         }
 
-        //public bool Add(LoginModel loginModel)
-        //{
-        //    User userEntity = new User();
-           
-        //    userEntity.Email = loginModel.Email;
-        //    userEntity.Password = loginModel.Password;
-           
-        //    _userContext.Users.Add(userEntity);
-        //    int result = _userContext.SaveChanges();
-        //    if (result > 0)
-        //    {
-        //        return true;
-        //    }
-        //    else
-        //    {
-        //        return false;
-        //    }
-        //}
+        
 
         public ResponseModel ForgotPassword(ForgotPasswordModel model)
         {
@@ -83,15 +74,19 @@ namespace RepositoryLayer.Services
             }
         }
 
-        //public void Delete(User user)
-        //{
-        //    _userContext.Users.Remove(user);
-        //    _userContext.SaveChanges();
-        //}
+       
 
         public User Get(long id)
         {
-            return _userContext.Users.FirstOrDefault(e => e.UserId == id);
+            try
+            {
+                return _userContext.Users.FirstOrDefault(e => e.UserId == id);
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
         }
 
         public ResponseModel Login(LoginModel loginModel)
@@ -149,15 +144,6 @@ namespace RepositoryLayer.Services
             }
         }
 
-        //public void Update(User user, User user1)
-        //{
-        //    user.FirstName = user1.FirstName;
-        //    user.LastName = user1.LastName;
-        //    user.Email = user1.Email;
-        //    user.Password = user1.Password;
-        //    user.CreatedAt = user1.CreatedAt;
-        //    user.ModifiedAt = user1.ModifiedAt;
-        //    _userContext.SaveChanges();
-        //}
+       
     }
 }
