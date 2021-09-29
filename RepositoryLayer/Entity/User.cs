@@ -11,7 +11,7 @@ namespace RepositoryLayer.Entity
 
     public class User
     {
-        [Key]
+        
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long UserId { get; set; }
         public string FirstName { get; set; }
@@ -21,7 +21,8 @@ namespace RepositoryLayer.Entity
         public DateTime CreatedAt { get; set; }
         public DateTime ModifiedAt { get; set; }
 
-        public virtual ICollection<Notes> Notes { get; set; }
+        //public virtual ICollection<Notes> Notes { get; set; }
+        public IList<Collaboration> Collaborations { get; set; }
     }
        
 }

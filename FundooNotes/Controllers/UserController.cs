@@ -155,8 +155,8 @@ namespace FundooNotes.Controllers
 
         }
 
-        [HttpGet("gettokenid")]
-        public long GetTokenId()
+        
+        private long GetTokenId()
         {
             return Convert.ToInt64(User.FindFirst("Id").Value);
         }

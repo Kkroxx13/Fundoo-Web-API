@@ -1,6 +1,7 @@
 ﻿using BusinessLayer.Interface;
 using BusinessLayer.Services;
 using CommonLayer.Model.NotesModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -100,12 +101,13 @@ namespace FundooNotes.Controllers
 
         }
 
-        [HttpPut("{Id}")]
+        [HttpPut("{Id}/edit")]
         public IActionResult EditNotes(EditNotesModel editNotesModel,long Id)
         {
 
             try
             {
+                
                 var result = _notesBL.EditNotes(editNotesModel, Id);
                 if (result == true)
                 {
@@ -124,11 +126,12 @@ namespace FundooNotes.Controllers
 
         }
 
-        [HttpPut("{Id}/arcive")]
+        [HttpPut("{Id}/archive")]
         public IActionResult ArchiveNote(IsArchiveModel isArchiveModel,long Id)
         {
             try
             {
+               
                 var result = _notesBL.ArchiveNote(isArchiveModel, Id);
                 if (result == true)
                 {
@@ -146,11 +149,12 @@ namespace FundooNotes.Controllers
             }
         }
 
-        [HttpPut("{Id}/changecolor")]
-        public IActionResult ChangeColor(long Id, ChangeColorModel changeColorModel)
+        [HttpPut("{Id}/color")]
+        public IActionResult ChangeColor( ChangeColorModel changeColorModel,long Id)
         {
             try
             {
+                
                 var result = _notesBL.ChangeColor(Id, changeColorModel);
                 if (result == true)
                 {
@@ -169,11 +173,12 @@ namespace FundooNotes.Controllers
         }
 
 
-        [HttpPut("{Id}/pinnote")]
-        public IActionResult PinNote( long Id)
+        [HttpPut("{Id}/pin")]
+        public IActionResult PinNote(long Id)
         {
             try
             {
+                
                 var result = _notesBL.PinNote(Id);
                 if (result == true)
                 {
@@ -191,11 +196,13 @@ namespace FundooNotes.Controllers
             }
         }
 
-        [HttpPut("{Id}/trashnote")]
-        public IActionResult TrashNote(long Id)
+        
+        [HttpPut("{Id}/trash")]
+        public IActionResult TrashNote()
         {
             try
             {
+                var Id = GetTokenId();
                 var result = _notesBL.TrashNote(Id);
                 if (result == true)
                 {
@@ -213,12 +220,13 @@ namespace FundooNotes.Controllers
             }
         }
 
-        [HttpPut("addreminder")]
-        public IActionResult AddReminder( AddReminderModel addReminderModel)
+        
+        [HttpPut("{Id}/reminder")]
+        public IActionResult AddReminder( AddReminderModel addReminderModel,long Id)
         {
             try
             {
-                var Id = GetTokenId();
+                
                 var result = _notesBL.AddReminder(Id, addReminderModel);
                 if (result == true)
                 {
@@ -235,10 +243,14 @@ namespace FundooNotes.Controllers
                 return this.BadRequest(new { success = false, message = ex.Message });
             }
         }
-        public long GetTokenId()
+
+        // Get UserID by JWT Token
+        private long GetTokenId()
         {
             return Convert.ToInt64(User.FindFirst("Id").Value);
         }
+
+        //Generate JWT Token
         private static string GenerateJwtToken(long UserId, string EmailId)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));

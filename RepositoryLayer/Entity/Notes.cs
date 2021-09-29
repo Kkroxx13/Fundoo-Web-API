@@ -8,7 +8,7 @@ namespace RepositoryLayer.Entity
 {
    public class Notes
     {
-        [Key]
+       
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public string Title { get; set; }
@@ -25,8 +25,10 @@ namespace RepositoryLayer.Entity
         
         public long UserId { get; set; }     /// foreign key..        
 
-        public virtual User User { get; set; }
+        //public virtual User User { get; set; }
 
-      
+        public IList<Collaboration> Collaborations { get; set; }
+
+
     }
 }
