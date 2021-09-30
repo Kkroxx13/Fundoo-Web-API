@@ -1,6 +1,8 @@
 ﻿using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
 using CommonLayer.Model.NotesModel;
+using CommonLayer.Model.NotesModel.Request;
+using CommonLayer.Model.NotesModel.Response;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using RepositoryLayer.Context;
@@ -305,7 +307,7 @@ namespace RepositoryLayer.Services
             }
         }
 
-        [Obsolete]
+       
         public bool UploadImage(IFormFile file, int Id)
         {
             try
@@ -343,6 +345,25 @@ namespace RepositoryLayer.Services
             {
 
                 throw;
+            }
+        }
+
+        public bool AddCollaborators(int Id, AddCollaboratorResponse collaborator)
+        {
+            Collaboration collaboration = new Collaboration();
+            collaboration.UserId = collaborator.UserId;
+            collaboration.Id = Id;
+            collaboration.CreatedAt = DateTime.Now;
+            collaboration.CollaborationId = collaborator.CollaboratorId;
+            _userContext.Collaborations.Add(collaboration);
+            int result = _userContext.SaveChanges();
+            if (result > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
     }

@@ -1,4 +1,6 @@
 ﻿using CommonLayer.Model.NotesModel;
+using CommonLayer.Model.NotesModel.Request;
+using CommonLayer.Model.NotesModel.Response;
 using Microsoft.AspNetCore.Http;
 using RepositoryLayer.Entity;
 using System;
@@ -21,5 +23,6 @@ namespace RepositoryLayer.Interface
        
         bool AddReminder(long Id, AddReminderModel addReminderModel);
         bool UploadImage(IFormFile file, int Id);
+        bool AddCollaborators(int Id, AddCollaboratorResponse collaborator);
     }
 }

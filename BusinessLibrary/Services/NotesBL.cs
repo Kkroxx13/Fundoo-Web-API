@@ -1,5 +1,7 @@
 ﻿using BusinessLayer.Interface;
 using CommonLayer.Model.NotesModel;
+using CommonLayer.Model.NotesModel.Request;
+using CommonLayer.Model.NotesModel.Response;
 using Microsoft.AspNetCore.Http;
 using RepositoryLayer.Entity;
 using RepositoryLayer.Interface;
@@ -138,7 +140,19 @@ namespace BusinessLayer.Services
         {
             try
             {
-                return this._notesRL.UploadImage(file,Id);
+                return this._notesRL.UploadImage(file, Id);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        public bool AddCollaborators(int Id, AddCollaboratorResponse collaborator)
+        {
+            try
+            {
+                return this._notesRL.AddCollaborators(Id, collaborator);
             }
             catch (Exception ex)
             {

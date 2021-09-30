@@ -1,6 +1,8 @@
 ﻿using BusinessLayer.Interface;
 using BusinessLayer.Services;
 using CommonLayer.Model.NotesModel;
+using CommonLayer.Model.NotesModel.Request;
+using CommonLayer.Model.NotesModel.Response;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -270,6 +272,31 @@ namespace FundooNotes.Controllers
                 return this.BadRequest(new { success = false, message = ex.Message });
             }
         }
+
+        [HttpPost("{Id}/AddCollaborator")]
+        public IActionResult AddCollaborators(int Id, AddCollaboratorResponse collaborator)
+        {
+            if (collaborator.CollaboratorId != 0 && Id != 0)
+            {
+                var result = _notesBL.AddCollaborators(Id, collaborator);
+                if (result == true)
+                {
+                    return this.Ok(new { success = true, message = "Collaborator Added Successfully " });
+                }
+                else
+                {
+                    return this.BadRequest(new { success = false, message = "Collaborator adding unsuccessfull" });
+                }
+            }
+            else
+            {
+                return this.BadRequest(new { success = false, message = "Collaborator adding unsuccessfull" });
+            }
+           
+            
+        }
+
+
 
 
 
