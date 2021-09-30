@@ -13,9 +13,13 @@ namespace RepositoryLayer.Context
 {
     public class UserContext:DbContext
     {
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    optionsBuilder.UseSqlServer("Server=IN-100N0F3;Database=FundooNotesDB;Trusted_Connection=True");
+        //}
+        public UserContext(DbContextOptions options) : base(options)
         {
-            optionsBuilder.UseSqlServer("Server=IN-100N0F3;Database=FundooNotesDB;Trusted_Connection=True");
+
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

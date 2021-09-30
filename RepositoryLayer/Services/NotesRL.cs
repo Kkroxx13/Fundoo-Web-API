@@ -1,4 +1,8 @@
-﻿using CommonLayer.Model.NotesModel;
+﻿using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
+using CommonLayer.Model.NotesModel;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using RepositoryLayer.Context;
 using RepositoryLayer.Entity;
 using RepositoryLayer.Interface;
@@ -12,9 +16,11 @@ namespace RepositoryLayer.Services
     public class NotesRL : INotesRL
     {
         readonly UserContext _userContext;
-        public NotesRL(UserContext context)
+        IConfiguration _configuration;
+        public NotesRL(UserContext context, IConfiguration configuration)
         {
             _userContext = context;
+            _configuration = configuration;
         }
         public bool CreateNotes(AddNotesRequestModel model)
         {
@@ -296,6 +302,47 @@ namespace RepositoryLayer.Services
             {
 
                 return false;
+            }
+        }
+
+        [Obsolete]
+        public bool UploadImage(IFormFile file, int Id)
+        {
+            try
+            {
+                Account account = new Account(
+                    "selg",
+                    "968789572864694",
+                    "gefKxEXzG727bRz5mBN3bUww9gA");
+                var Path = file.OpenReadStream();
+                Cloudinary cloudinary = new Cloudinary(account);
+                cloudinary.Api.Secure = true;
+
+                var uploadParams = new ImageUploadParams()
+                {
+                    File = new FileDescription(file.FileName, Path)
+                   
+                };
+                var uploadResult = cloudinary.Upload(uploadParams);
+                
+
+                Notes notes = _userContext.Notes.FirstOrDefault(e => e.Id == Id);
+                notes.Image = uploadResult.Url.ToString();
+                _userContext.Notes.Update(notes);
+                int result = _userContext.SaveChanges();
+                if (result > 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw;
             }
         }
     }

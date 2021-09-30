@@ -1,4 +1,5 @@
 ﻿using CommonLayer.Model.NotesModel;
+using Microsoft.AspNetCore.Http;
 using RepositoryLayer.Entity;
 using System;
 using System.Collections.Generic;
@@ -19,5 +20,6 @@ namespace RepositoryLayer.Interface
         bool TrashNote(long Id);
        
         bool AddReminder(long Id, AddReminderModel addReminderModel);
+        bool UploadImage(IFormFile file, int Id);
     }
 }

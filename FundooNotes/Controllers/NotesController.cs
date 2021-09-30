@@ -2,6 +2,8 @@
 using BusinessLayer.Services;
 using CommonLayer.Model.NotesModel;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -23,10 +25,12 @@ namespace FundooNotes.Controllers
     {
         public static IConfiguration _config;
         private readonly INotesBL _notesBL;
-        public NotesController(INotesBL notesBL, IConfiguration config)
+        public static IWebHostEnvironment _environment;
+        public NotesController(INotesBL notesBL, IConfiguration config, IWebHostEnvironment environment)
         {
             _notesBL = notesBL;
             _config = config;
+            _environment = environment;
         }
 
         [HttpGet]
@@ -243,6 +247,31 @@ namespace FundooNotes.Controllers
                 return this.BadRequest(new { success = false, message = ex.Message });
             }
         }
+
+        [HttpPut("{Id}/upload")]
+        public IActionResult UploadImage(IFormFile file,int Id)
+        {
+            try
+            {
+
+                var result = _notesBL.UploadImage(file,Id);
+                if (result == true)
+                {
+                    return this.Ok(new { success = true, message = "Image Added Successfully " });
+                }
+                else
+                {
+                    return this.BadRequest(new { success = false, message = "Image adding unsuccessfull" });
+                }
+            }
+            catch (Exception ex)
+            {
+
+                return this.BadRequest(new { success = false, message = ex.Message });
+            }
+        }
+
+
 
         // Get UserID by JWT Token
         private long GetTokenId()

@@ -1,5 +1,6 @@
 ﻿using BusinessLayer.Interface;
 using CommonLayer.Model.NotesModel;
+using Microsoft.AspNetCore.Http;
 using RepositoryLayer.Entity;
 using RepositoryLayer.Interface;
 using System;
@@ -126,6 +127,18 @@ namespace BusinessLayer.Services
             try
             {
                 return this._notesRL.AddReminder(Id,addReminderModel);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        public bool UploadImage(IFormFile file, int Id)
+        {
+            try
+            {
+                return this._notesRL.UploadImage(file,Id);
             }
             catch (Exception ex)
             {

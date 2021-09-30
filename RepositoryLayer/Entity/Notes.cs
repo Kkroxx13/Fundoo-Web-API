@@ -21,11 +21,8 @@ namespace RepositoryLayer.Entity
         public DateTime AddReminder { get; set; }      
         public bool IsArchive { get; set; }
         public bool IsNote { get; set; }
-        public bool IsTrash { get; set; }
-        
-        public long UserId { get; set; }     /// foreign key..        
-
-        //public virtual User User { get; set; }
+        public bool IsTrash { get; set; }        
+        public long UserId { get; set; }     /// foreign key..               
 
         public IList<Collaboration> Collaborations { get; set; }
 
