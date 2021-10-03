@@ -103,6 +103,8 @@ namespace FundooNotes
             services.AddScoped<IUserRL, UserRL>();
             services.AddScoped<INotesBL, NotesBL>();
             services.AddScoped<INotesRL, NotesRL>();
+            services.AddScoped<ILabelBL, LabelBL>();
+            services.AddScoped<ILabelRL, LabelRL>();
             services.AddControllers();
 
 

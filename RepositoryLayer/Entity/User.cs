@@ -23,6 +23,7 @@ namespace RepositoryLayer.Entity
 
        
         public IList<Collaboration> Collaborations { get; set; }
+        public IList<Label> Labels { get; set; }
     }
        
 }

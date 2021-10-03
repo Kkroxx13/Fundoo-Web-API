@@ -29,6 +29,7 @@ namespace RepositoryLayer.Context
                .IsUnique();
 
             modelBuilder.Entity<Collaboration>().HasKey(sc => new { sc.UserId, sc.Id });
+            modelBuilder.Entity<Label>().HasKey(sc => new { sc.LabelId });
 
            
 
@@ -43,6 +44,11 @@ namespace RepositoryLayer.Context
                 .WithMany(s => s.Collaborations)
                 .HasForeignKey(sc => sc.Id);
 
+            modelBuilder.Entity<Label>()
+                .HasOne<User>(sc => sc.User)
+                .WithMany(s => s.Labels)
+                .HasForeignKey(sc => sc.UserId);
+                
             modelBuilder.Entity<User>().HasData(new User
             {
                 UserId = 1,
@@ -87,6 +93,7 @@ namespace RepositoryLayer.Context
         public DbSet<Notes> Notes { get; set; }
         public DbSet<Collaboration> Collaborations { get; set; }
 
+        public DbSet<Label> Labels { get; set; }
 
 
         //public DbSet<User> Users { get; set; }
