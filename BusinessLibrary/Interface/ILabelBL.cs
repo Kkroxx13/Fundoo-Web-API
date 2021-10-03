@@ -8,5 +8,6 @@ namespace BusinessLayer.Interface
     public interface ILabelBL
     {
         bool AddLabel(AddLabel addLabel,long userId);
+        bool EditLabel(EditLabel editLabelModel, long labelId);
     }
 }

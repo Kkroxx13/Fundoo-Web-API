@@ -5,6 +5,7 @@ using RepositoryLayer.Entity;
 using RepositoryLayer.Interface;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace RepositoryLayer.Services
@@ -28,6 +29,23 @@ namespace RepositoryLayer.Services
             labelEntity.CreatedDateTime = DateTime.Now;
             labelEntity.ModifiedDateTime = DateTime.Now;
             _userContext.Labels.Add(labelEntity);
+            int result = _userContext.SaveChanges();
+            if (result > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public bool EditLabel(EditLabel editLabelModel, long labelId)
+        {
+            Label label = _userContext.Labels.FirstOrDefault(e => e.LabelId == labelId);
+            label.LabelName = editLabelModel.LabelName;
+            label.ModifiedDateTime = DateTime.Now;
+            _userContext.Labels.Update(label);
             int result = _userContext.SaveChanges();
             if (result > 0)
             {

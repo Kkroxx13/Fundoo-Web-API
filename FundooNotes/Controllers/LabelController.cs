@@ -54,6 +54,30 @@ namespace FundooNotes.Controllers
             }
 
         }
+        [HttpPut("{labelId}/edit")]
+        public IActionResult EditLabel(EditLabel editLabelModel, long labelId)
+        {
+
+            try
+            {
+
+                var result = _labelBL.EditLabel(editLabelModel, labelId);
+                if (result == true)
+                {
+                    return this.Ok(new { success = true, message = "Label Edited Successfully" });
+                }
+                else
+                {
+                    return this.BadRequest(new { success = false, message = "Label Updation Failed" });
+                }
+            }
+            catch (Exception ex)
+            {
+
+                return this.BadRequest(new { success = false, message = ex.Message });
+            }
+
+        }
         // Get UserID by JWT Token
         private long GetTokenId()
         {

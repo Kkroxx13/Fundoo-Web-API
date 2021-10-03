@@ -26,5 +26,17 @@ namespace BusinessLayer.Services
                 throw;
             }
         }
+
+        public bool EditLabel(EditLabel editLabelModel, long labelId)
+        {
+            try
+            {
+                return this._labelRL.EditLabel(editLabelModel, labelId);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
     }
 }
