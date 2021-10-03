@@ -108,6 +108,21 @@ namespace FundooNotes.Controllers
 
 
         }
+
+        [HttpGet]
+        public IActionResult DisplayLabel()
+        {
+            try
+            {
+                IEnumerable<Label> labels = _labelBL.DisplayLabel();
+                return Ok(labels);
+            }
+            catch (Exception ex)
+            {
+
+                return this.BadRequest(new { success = false, message = ex.Message });
+            }
+        }
         // Get UserID by JWT Token
         private long GetTokenId()
         {

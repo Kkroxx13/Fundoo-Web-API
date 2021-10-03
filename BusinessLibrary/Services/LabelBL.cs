@@ -40,6 +40,18 @@ namespace BusinessLayer.Services
             }
         }
 
+        public IEnumerable<Label> DisplayLabel()
+        {
+            try
+            {
+                return this._labelRL.DisplayLabel();
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
         public bool EditLabel(EditLabel editLabelModel, long labelId)
         {
             try

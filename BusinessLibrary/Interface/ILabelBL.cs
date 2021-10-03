@@ -12,5 +12,6 @@ namespace BusinessLayer.Interface
         bool EditLabel(EditLabel editLabelModel, long labelId);
         Label Get(long labelId);
         bool DeleteLabel(Label label);
+        IEnumerable<Label> DisplayLabel();
     }
 }

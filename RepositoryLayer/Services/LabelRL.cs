@@ -65,6 +65,19 @@ namespace RepositoryLayer.Services
             }
         }
 
+        public IEnumerable<Label> DisplayLabel()
+        {
+            try
+            {
+                return _userContext.Labels.ToList();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
         public bool EditLabel(EditLabel editLabelModel, long labelId)
         {
             Label label = _userContext.Labels.FirstOrDefault(e => e.LabelId == labelId);
