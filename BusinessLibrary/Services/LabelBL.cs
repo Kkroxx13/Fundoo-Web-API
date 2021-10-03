@@ -1,5 +1,6 @@
 ﻿using BusinessLayer.Interface;
 using CommonLayer.Model.LabelModel;
+using RepositoryLayer.Entity;
 using RepositoryLayer.Interface;
 using System;
 using System.Collections.Generic;
@@ -27,11 +28,35 @@ namespace BusinessLayer.Services
             }
         }
 
+        public bool DeleteLabel(Label label)
+        {
+            try
+            {
+                return this._labelRL.DeleteLabel(label);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
         public bool EditLabel(EditLabel editLabelModel, long labelId)
         {
             try
             {
                 return this._labelRL.EditLabel(editLabelModel, labelId);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        public Label Get(long labelId)
+        {
+            try
+            {
+                return this._labelRL.Get(labelId);
             }
             catch (Exception ex)
             {

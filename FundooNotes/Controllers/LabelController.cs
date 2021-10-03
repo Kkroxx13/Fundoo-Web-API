@@ -4,6 +4,7 @@ using CommonLayer.Model.LabelModel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using RepositoryLayer.Entity;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -76,6 +77,35 @@ namespace FundooNotes.Controllers
 
                 return this.BadRequest(new { success = false, message = ex.Message });
             }
+
+        }
+        [HttpDelete("{labelId}")]
+        public IActionResult DeleteLabel(long labelId)
+        {
+            try
+            {
+                Label label = _labelBL.Get(labelId);
+                if (label == null)
+                {
+                    return NotFound("The Employee record couldn't be found.");
+                }
+                var result = _labelBL.DeleteLabel(label);
+
+                if (result == true)
+                {
+                    return this.Ok(new { success = true, message = "Label Deleted Successfully" });
+                }
+                else
+                {
+                    return this.BadRequest(new { success = false, message = "Label Deletion Failed" });
+                }
+            }
+            catch (Exception ex)
+            {
+
+                return this.BadRequest(new { success = false, message = ex.Message });
+            }
+
 
         }
         // Get UserID by JWT Token

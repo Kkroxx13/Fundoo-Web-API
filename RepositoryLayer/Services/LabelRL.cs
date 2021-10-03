@@ -10,7 +10,7 @@ using System.Text;
 
 namespace RepositoryLayer.Services
 {
-   public class LabelRL:ILabelRL
+    public class LabelRL : ILabelRL
     {
         readonly UserContext _userContext;
         IConfiguration _configuration;
@@ -40,6 +40,31 @@ namespace RepositoryLayer.Services
             }
         }
 
+        public bool DeleteLabel(Label label)
+        {
+            try
+            {
+                _userContext.Labels.Remove(label);
+                var result = _userContext.SaveChanges();
+
+                if (result > 0)
+                {
+                    return true;
+
+                }
+
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
         public bool EditLabel(EditLabel editLabelModel, long labelId)
         {
             Label label = _userContext.Labels.FirstOrDefault(e => e.LabelId == labelId);
@@ -54,6 +79,19 @@ namespace RepositoryLayer.Services
             else
             {
                 return false;
+            }
+        }
+
+        public Label Get(long labelId)
+        {
+            try
+            {
+                return _userContext.Labels.FirstOrDefault(e => e.LabelId == labelId);
+            }
+            catch (Exception)
+            {
+
+                throw;
             }
         }
     }
