@@ -40,11 +40,11 @@ namespace BusinessLayer.Services
             }
         }
 
-        public IEnumerable<Label> DisplayLabel()
+        public IEnumerable<Label> DisplayLabel(long userId)
         {
             try
             {
-                return this._labelRL.DisplayLabel();
+                return this._labelRL.DisplayLabel(userId);
             }
             catch (Exception ex)
             {

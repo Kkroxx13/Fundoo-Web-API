@@ -1,6 +1,7 @@
 ﻿using BusinessLayer.Interface;
 using BusinessLibrary.Interface;
 using CommonLayer.Model.LabelModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -28,6 +29,7 @@ namespace FundooNotes.Controllers
             _config = config;
         }
 
+        [Authorize]
         [HttpPost]
         public IActionResult AddLabel(AddLabel addLabel)
         {
@@ -109,12 +111,14 @@ namespace FundooNotes.Controllers
 
         }
 
+        [Authorize]
         [HttpGet]
         public IActionResult DisplayLabel()
         {
+            var userId = GetTokenId();
             try
             {
-                IEnumerable<Label> labels = _labelBL.DisplayLabel();
+                IEnumerable<Label> labels = _labelBL.DisplayLabel(userId);
                 return Ok(labels);
             }
             catch (Exception ex)

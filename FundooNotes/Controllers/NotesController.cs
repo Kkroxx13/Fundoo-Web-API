@@ -55,11 +55,12 @@ namespace FundooNotes.Controllers
         {
             try
             {
+                long userId = GetTokenId();
                 if (model == null)
                 {
                     return BadRequest("Employee is null.");
                 }
-                var result = _notesBL.CreateNotes(model);
+                var result = _notesBL.CreateNotes(model,userId);
                 if (result == true)
                 {
                     return this.Ok(new { success = true, message = "Note Created Successfully" });
@@ -295,6 +296,27 @@ namespace FundooNotes.Controllers
            
             
         }
+
+        [HttpGet("Collabs")]
+        public ActionResult GetAllCollabs()
+        {
+            try
+            {
+                long UserId = GetTokenId();
+                var CollabList = _notesBL.GetAllCollabs(UserId);
+                if (CollabList.Count > 0)
+                {
+                  
+                    return Ok(new { Success = true, Message = $" You have {CollabList.Count} collabs", Collabs = CollabList });
+                }
+                return Ok(new { Success = true, Message = $" Collab list is Empty" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Success = false, ex.Message });
+            }
+        }
+
 
 
 

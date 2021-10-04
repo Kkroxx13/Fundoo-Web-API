@@ -11,7 +11,7 @@ namespace RepositoryLayer.Interface
 {
     public interface INotesRL
     {
-        bool CreateNotes(AddNotesRequestModel model);
+        bool CreateNotes(AddNotesRequestModel model, long userId);
         IEnumerable<Notes> DisplayNotes();
         Notes Get(long Id);
         bool Delete(Notes notes);
@@ -24,5 +24,6 @@ namespace RepositoryLayer.Interface
         bool AddReminder(long Id, AddReminderModel addReminderModel);
         bool UploadImage(IFormFile file, int Id);
         bool AddCollaborators(int Id, AddCollaboratorResponse collaborator);
+        List<CollabResponse> GetAllCollabs(long UserId);
     }
 }

@@ -21,9 +21,9 @@ namespace BusinessLayer.Services
 
         
 
-        public bool CreateNotes(AddNotesRequestModel model)
+        public bool CreateNotes(AddNotesRequestModel model, long userId)
         {
-            return _notesRL.CreateNotes(model);
+            return _notesRL.CreateNotes(model,userId);
         }
 
         public bool Delete(Notes notes)
@@ -159,5 +159,11 @@ namespace BusinessLayer.Services
                 throw;
             }
         }
+
+        public List<CollabResponse> GetAllCollabs(long UserId)
+        {
+            return _notesRL.GetAllCollabs(UserId);
+        }
+
     }
 }

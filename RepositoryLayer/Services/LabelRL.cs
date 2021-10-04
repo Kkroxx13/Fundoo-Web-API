@@ -65,11 +65,13 @@ namespace RepositoryLayer.Services
             }
         }
 
-        public IEnumerable<Label> DisplayLabel()
+        public IEnumerable<Label> DisplayLabel(long userId)
         {
             try
             {
-                return _userContext.Labels.ToList();
+                List<Label> label = _userContext.Labels.Where(x => x.UserId == userId ).ToList();
+                return label;
+                //return _userContext.Labels.ToList();
             }
             catch (Exception)
             {

@@ -24,7 +24,7 @@ namespace RepositoryLayer.Services
             _userContext = context;
             _configuration = configuration;
         }
-        public bool CreateNotes(AddNotesRequestModel model)
+        public bool CreateNotes(AddNotesRequestModel model, long userId)
         {
             try
             {
@@ -38,10 +38,11 @@ namespace RepositoryLayer.Services
                 notesEntity.CreatedDate = DateTime.Now;
                 notesEntity.ModifiedDate =DateTime.Now;
                 notesEntity.AddReminder = model.AddReminder;
-                notesEntity.UserId = model.UserId;
+                //notesEntity.UserId = model.UserId;
                 notesEntity.IsArchive = model.IsArchive;
                 notesEntity.IsNote = model.IsNote;
                 notesEntity.IsTrash = model.IsTrash;
+                notesEntity.UserId = userId;
                 _userContext.Notes.Add(notesEntity);
                 int result = _userContext.SaveChanges();
                 if (result > 0)
@@ -365,6 +366,20 @@ namespace RepositoryLayer.Services
             {
                 return false;
             }
+        }
+
+        public List<CollabResponse> GetAllCollabs(long UserId)
+        {
+            List<CollabResponse> allCollabs = _userContext.Collaborations.Where(collab => collab.UserId == UserId).
+                Select(collabs => new CollabResponse
+                {
+                    UserId=collabs.UserId,
+                    NotesId=collabs.Id,
+                    CollaboratorId=collabs.CollaborationId
+                  
+                    
+                }).ToList();
+            return allCollabs;
         }
     }
 }
