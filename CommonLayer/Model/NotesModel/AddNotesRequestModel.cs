@@ -19,14 +19,14 @@ namespace CommonLayer.Model.NotesModel
         public string Color { get; set; }
         [Required]
         public bool IsPin { get; set; }
-        [Required]
-        public DateTime CreatedDate { get; set; }
-        [Required]
-        public DateTime ModifiedDate { get; set; }
+        //[Required]
+        //public DateTime CreatedDate { get; set; }
+        //[Required]
+        //public DateTime ModifiedDate { get; set; }
         [Required]
         public DateTime AddReminder { get; set; }
-        [Required]
-        public int UserId { get; set; }     /// foreign key..
+        //[Required]
+        //public int UserId { get; set; }     /// foreign key..
         [Required]
         public bool IsArchive { get; set; }
         [Required]

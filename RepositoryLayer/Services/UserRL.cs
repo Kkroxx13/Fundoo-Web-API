@@ -25,7 +25,8 @@ namespace RepositoryLayer.Services
                 userEntity.FirstName = user.FirstName;
                 userEntity.LastName = user.LastName;
                 userEntity.Email = user.Email;
-                userEntity.Password = user.Password;
+                var encrypt_pass = Decrypt_Password(user.Password);
+                userEntity.Password = encrypt_pass;
                 userEntity.CreatedAt = DateTime.Now;
                 _userContext.Users.Add(userEntity);
                 int result = _userContext.SaveChanges();
@@ -91,10 +92,10 @@ namespace RepositoryLayer.Services
 
         public ResponseModel Login(LoginModel loginModel)
         {
-           
+            var decryptpass = Decrypt_Password(loginModel.Password);
             try
             {
-                User user = _userContext.Users.FirstOrDefault(e => e.Email == loginModel.Email && e.Password==loginModel.Password);
+                User user = _userContext.Users.FirstOrDefault(e => e.Email == loginModel.Email && e.Password==decryptpass);
                 ResponseModel responseModel = new ResponseModel()
                 {
                     UserId = user.UserId,
@@ -144,6 +145,17 @@ namespace RepositoryLayer.Services
             }
         }
 
-       
+        private string Decrypt_Password(string encryptpassword)
+        {
+            string pswstr = string.Empty;
+            System.Text.UTF8Encoding encode_psw = new System.Text.UTF8Encoding();
+            System.Text.Decoder Decode = encode_psw.GetDecoder();
+            byte[] todecode_byte = Convert.FromBase64String(encryptpassword);
+            int charCount = Decode.GetCharCount(todecode_byte, 0, todecode_byte.Length);
+            char[] decoded_char = new char[charCount];
+            Decode.GetChars(todecode_byte, 0, todecode_byte.Length, decoded_char, 0);
+            pswstr = new String(decoded_char);
+            return pswstr;
+        }
     }
 }

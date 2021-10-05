@@ -33,20 +33,20 @@ namespace FundooNotes.Controllers
 
 
         // GET: api/user
-        [HttpGet]
-        public IActionResult Get()
-        {
-            try
-            {
-                IEnumerable<User> user = userBL.GetAll();
-                return Ok(user);
-            }
-            catch (Exception ex)
-            {
+        //[HttpGet]
+        //public IActionResult Get()
+        //{
+        //    try
+        //    {
+        //        IEnumerable<User> user = userBL.GetAll();
+        //        return Ok(user);
+        //    }
+        //    catch (Exception ex)
+        //    {
 
-                return this.BadRequest(new { success = false, message = ex.Message });
-            }
-        }
+        //        return this.BadRequest(new { success = false, message = ex.Message });
+        //    }
+        //}
         
         // POST: api/user
         [HttpPost("register")]
@@ -61,7 +61,7 @@ namespace FundooNotes.Controllers
                 var result = userBL.Register(user);
                 if (result == true)
                 {
-                    return this.Ok(new { success = true, message = "User successfully Registered" });
+                    return this.Ok(new { success = true, message = "User successfully Registered",user.FirstName,user.LastName,user.Email });
                 }
                 else
                 {

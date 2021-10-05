@@ -12,18 +12,18 @@ namespace BusinessLayer.Interface
    public interface INotesBL
     {
         bool CreateNotes(AddNotesRequestModel model, long userId);
-        IEnumerable<Notes> DisplayNotes();
-        Notes Get(long Id);
+        IEnumerable<Notes> DisplayNotes(long userId);
+        Notes Get(long Id,long userId);
         bool Delete(Notes notes);
-        bool EditNotes(EditNotesModel editNotesModel, long Id);
-        bool ArchiveNote(IsArchiveModel isArchiveModel, long Id);
-        bool ChangeColor(long Id, ChangeColorModel changeColorModel);
-        bool PinNote(long Id);
-        bool TrashNote(long Id);
+        bool EditNotes(EditNotesModel editNotesModel, long Id, long userId);
+        bool ArchiveNote(IsArchiveModel isArchiveModel, long Id, long userId);
+        bool ChangeColor(long Id, ChangeColorModel changeColorModel, long userId);
+        bool PinNote(long Id,long userId);
+        bool TrashNote(long Id, long userId);
         
-        bool AddReminder(long Id, AddReminderModel addReminderModel);
-        bool UploadImage(IFormFile file, int Id);
-        bool AddCollaborators(int Id, AddCollaboratorResponse collaborator);
+        bool AddReminder(long Id, AddReminderModel addReminderModel, long userId);
+        bool UploadImage(IFormFile file, int Id, long userId);
+        bool AddCollaborators(int Id, AddCollaboratorResponse collaborator, long userId);
         List<CollabResponse> GetAllCollabs(long UserId);
     }
 }

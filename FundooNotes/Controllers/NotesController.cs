@@ -21,7 +21,7 @@ using System.Threading.Tasks;
 namespace FundooNotes.Controllers
 {
     [Route("api/notes")]
-
+    [Authorize]
     [ApiController]
     public class NotesController : Controller
     {
@@ -38,9 +38,10 @@ namespace FundooNotes.Controllers
         [HttpGet]
         public IActionResult DisplayNotes()
         {
+            var userId = GetTokenId();
             try
             {
-                IEnumerable<Notes> notes = _notesBL.DisplayNotes();
+                IEnumerable<Notes> notes = _notesBL.DisplayNotes(userId);
                 return Ok(notes);
             }
             catch (Exception ex)
@@ -81,9 +82,10 @@ namespace FundooNotes.Controllers
         [HttpDelete("{Id}")]
         public IActionResult DeleteNotes(long Id)
         {
+            long userId = GetTokenId();
             try
             {
-                Notes notes = _notesBL.Get(Id);
+                Notes notes = _notesBL.Get(Id,userId);
                 if (notes == null)
                 {
                     return NotFound("The Employee record couldn't be found.");
@@ -111,11 +113,12 @@ namespace FundooNotes.Controllers
         [HttpPut("{Id}/edit")]
         public IActionResult EditNotes(EditNotesModel editNotesModel,long Id)
         {
+            long userId = GetTokenId();
 
             try
             {
                 
-                var result = _notesBL.EditNotes(editNotesModel, Id);
+                var result = _notesBL.EditNotes(editNotesModel, Id, userId);
                 if (result == true)
                 {
                     return this.Ok(new { success = true, message = "Notes Edited Successfully" });
@@ -136,10 +139,11 @@ namespace FundooNotes.Controllers
         [HttpPut("{Id}/archive")]
         public IActionResult ArchiveNote(IsArchiveModel isArchiveModel,long Id)
         {
+            long userId = GetTokenId();
             try
             {
                
-                var result = _notesBL.ArchiveNote(isArchiveModel, Id);
+                var result = _notesBL.ArchiveNote(isArchiveModel, Id,userId);
                 if (result == true)
                 {
                     return this.Ok(new { success = true, message = "IsArchive function successfull" });
@@ -159,10 +163,11 @@ namespace FundooNotes.Controllers
         [HttpPut("{Id}/color")]
         public IActionResult ChangeColor( ChangeColorModel changeColorModel,long Id)
         {
+            long userId = GetTokenId();
             try
             {
                 
-                var result = _notesBL.ChangeColor(Id, changeColorModel);
+                var result = _notesBL.ChangeColor(Id, changeColorModel,userId);
                 if (result == true)
                 {
                     return this.Ok(new { success = true, message = "Color change successfull" });
@@ -179,14 +184,15 @@ namespace FundooNotes.Controllers
             }
         }
 
-
+        
         [HttpPut("{Id}/pin")]
         public IActionResult PinNote(long Id)
         {
+            long userId = GetTokenId();
             try
             {
                 
-                var result = _notesBL.PinNote(Id);
+                var result = _notesBL.PinNote(Id,userId);
                 if (result == true)
                 {
                     return this.Ok(new { success = true, message = "IsPin function successfull" });
@@ -205,12 +211,13 @@ namespace FundooNotes.Controllers
 
         
         [HttpPut("{Id}/trash")]
-        public IActionResult TrashNote()
+        public IActionResult TrashNote(long Id)
         {
+            long userId = GetTokenId();
             try
             {
-                var Id = GetTokenId();
-                var result = _notesBL.TrashNote(Id);
+               
+                var result = _notesBL.TrashNote(Id,userId);
                 if (result == true)
                 {
                     return this.Ok(new { success = true, message = "IsTrash function successfull" });
@@ -231,10 +238,11 @@ namespace FundooNotes.Controllers
         [HttpPut("{Id}/reminder")]
         public IActionResult AddReminder( AddReminderModel addReminderModel,long Id)
         {
+            long userId = GetTokenId();
             try
             {
                 
-                var result = _notesBL.AddReminder(Id, addReminderModel);
+                var result = _notesBL.AddReminder(Id, addReminderModel,userId);
                 if (result == true)
                 {
                     return this.Ok(new { success = true, message = "Reminder Added Successfully " });
@@ -254,10 +262,11 @@ namespace FundooNotes.Controllers
         [HttpPut("{Id}/upload")]
         public IActionResult UploadImage(IFormFile file,int Id)
         {
+            long userId = GetTokenId();
             try
             {
 
-                var result = _notesBL.UploadImage(file,Id);
+                var result = _notesBL.UploadImage(file,Id,userId);
                 if (result == true)
                 {
                     return this.Ok(new { success = true, message = "Image Added Successfully " });
@@ -274,12 +283,14 @@ namespace FundooNotes.Controllers
             }
         }
 
-        [HttpPost("{Id}/AddCollaborator")]
+        [HttpPost("{Id}/Collaborator")]
         public IActionResult AddCollaborators(int Id, AddCollaboratorResponse collaborator)
         {
+            long userId = GetTokenId();
+
             if (collaborator.CollaboratorId != 0 && Id != 0)
             {
-                var result = _notesBL.AddCollaborators(Id, collaborator);
+                var result = _notesBL.AddCollaborators(Id, collaborator, userId);
                 if (result == true)
                 {
                     return this.Ok(new { success = true, message = "Collaborator Added Successfully " });
@@ -293,8 +304,8 @@ namespace FundooNotes.Controllers
             {
                 return this.BadRequest(new { success = false, message = "Collaborator adding unsuccessfull" });
             }
-           
-            
+
+
         }
 
         [HttpGet("Collabs")]

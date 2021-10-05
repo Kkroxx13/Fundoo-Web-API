@@ -3,6 +3,7 @@ using CloudinaryDotNet.Actions;
 using CommonLayer.Model.NotesModel;
 using CommonLayer.Model.NotesModel.Request;
 using CommonLayer.Model.NotesModel.Response;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using RepositoryLayer.Context;
@@ -38,7 +39,7 @@ namespace RepositoryLayer.Services
                 notesEntity.CreatedDate = DateTime.Now;
                 notesEntity.ModifiedDate =DateTime.Now;
                 notesEntity.AddReminder = model.AddReminder;
-                //notesEntity.UserId = model.UserId;
+               
                 notesEntity.IsArchive = model.IsArchive;
                 notesEntity.IsNote = model.IsNote;
                 notesEntity.IsTrash = model.IsTrash;
@@ -86,11 +87,13 @@ namespace RepositoryLayer.Services
             }
         }
 
-        public IEnumerable<Notes> DisplayNotes()
+        public IEnumerable<Notes> DisplayNotes(long userId)
         {
+
             try
             {
-                return _userContext.Notes.ToList();
+                List<Notes> notes = _userContext.Notes.Where(x => x.UserId == userId).ToList();
+                return notes;
             }
             catch (Exception)
             {
@@ -99,9 +102,9 @@ namespace RepositoryLayer.Services
             }
         }
 
-        public bool EditNotes(EditNotesModel editNotesModel, long Id)
+        public bool EditNotes(EditNotesModel editNotesModel, long Id, long userId)
         {
-            Notes notes = _userContext.Notes.FirstOrDefault(e => e.Id == Id);
+            Notes notes = _userContext.Notes.FirstOrDefault(e => e.Id == Id && e.UserId==userId);
             try
             {
 
@@ -131,11 +134,11 @@ namespace RepositoryLayer.Services
 
         
 
-        public Notes Get(long Id)
+        public Notes Get(long Id, long userId)
         {
             try
             {
-                return _userContext.Notes.FirstOrDefault(e => e.Id == Id);
+                return _userContext.Notes.FirstOrDefault(e => e.Id == Id && e.UserId==userId);
             }
             catch (Exception)
             {
@@ -146,11 +149,11 @@ namespace RepositoryLayer.Services
 
         
 
-        public bool ArchiveNote(IsArchiveModel isArchiveModel, long Id)
+        public bool ArchiveNote(IsArchiveModel isArchiveModel, long Id, long userId)
         {
             try
             {
-                Notes notes = _userContext.Notes.FirstOrDefault(e => e.Id == Id);
+                Notes notes = _userContext.Notes.FirstOrDefault(e => e.Id == Id && e.UserId==userId);
                 if (notes.IsArchive == false)
                 {
 
@@ -181,11 +184,11 @@ namespace RepositoryLayer.Services
             }
         }
 
-        public bool ChangeColor(long Id, ChangeColorModel changeColorModel)
+        public bool ChangeColor(long Id, ChangeColorModel changeColorModel, long userId)
         {
             try
             {
-                Notes notes = _userContext.Notes.FirstOrDefault(e => e.Id == Id);
+                Notes notes = _userContext.Notes.FirstOrDefault(e => e.Id == Id && e.UserId==userId);
                 notes.Color = changeColorModel.Color;
                 
 
@@ -208,11 +211,11 @@ namespace RepositoryLayer.Services
             }
         }
 
-        public bool PinNote(long Id)
+        public bool PinNote(long Id, long userId)
         {
             try
             {
-                Notes notes = _userContext.Notes.FirstOrDefault(e => e.Id == Id);
+                Notes notes = _userContext.Notes.FirstOrDefault(e => e.Id == Id && e.UserId==userId);
                 if (notes.IsPin == false)
                 {
 
@@ -243,11 +246,12 @@ namespace RepositoryLayer.Services
             }
         }
 
-        public bool TrashNote(long Id)
+        
+        public bool TrashNote(long Id, long userId)
         {
             try
             {
-                Notes notes = _userContext.Notes.FirstOrDefault(e => e.Id == Id);
+                Notes notes = _userContext.Notes.FirstOrDefault(e => e.Id == Id && e.UserId==userId);
                 if (notes.IsTrash == false)
                 {
 
@@ -280,11 +284,12 @@ namespace RepositoryLayer.Services
 
        
 
-        public bool AddReminder(long Id, AddReminderModel addReminderModel)
+        public bool AddReminder(long Id, AddReminderModel addReminderModel, long userId)
         {
+            
             try
             {
-                Notes notes = _userContext.Notes.FirstOrDefault(e => e.Id == Id);
+                Notes notes = _userContext.Notes.FirstOrDefault(e => e.Id == Id && e.UserId==userId);
                 notes.AddReminder = addReminderModel.AddReminder;
                 notes.ModifiedDate = DateTime.Now;
 
@@ -309,7 +314,7 @@ namespace RepositoryLayer.Services
         }
 
        
-        public bool UploadImage(IFormFile file, int Id)
+        public bool UploadImage(IFormFile file, int Id, long userId)
         {
             try
             {
@@ -329,7 +334,7 @@ namespace RepositoryLayer.Services
                 var uploadResult = cloudinary.Upload(uploadParams);
                 
 
-                Notes notes = _userContext.Notes.FirstOrDefault(e => e.Id == Id);
+                Notes notes = _userContext.Notes.FirstOrDefault(e => e.Id == Id && e.UserId==userId);
                 notes.Image = uploadResult.Url.ToString();
                 _userContext.Notes.Update(notes);
                 int result = _userContext.SaveChanges();
@@ -349,10 +354,10 @@ namespace RepositoryLayer.Services
             }
         }
 
-        public bool AddCollaborators(int Id, AddCollaboratorResponse collaborator)
+        public bool AddCollaborators(int Id, AddCollaboratorResponse collaborator, long userId)
         {
             Collaboration collaboration = new Collaboration();
-            collaboration.UserId = collaborator.UserId;
+            collaboration.UserId = userId;
             collaboration.Id = Id;
             collaboration.CreatedAt = DateTime.Now;
             collaboration.CollaborationId = collaborator.CollaboratorId;
