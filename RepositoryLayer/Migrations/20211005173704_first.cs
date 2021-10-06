@@ -55,7 +55,8 @@ namespace RepositoryLayer.Migrations
                 {
                     UserId = table.Column<long>(type: "bigint", nullable: false),
                     Id = table.Column<int>(type: "int", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CollaborationId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -74,10 +75,39 @@ namespace RepositoryLayer.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Labels",
+                columns: table => new
+                {
+                    LabelId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    LabelName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserId = table.Column<long>(type: "bigint", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false),
+                    CreatedDateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModifiedDateTime = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Labels", x => x.LabelId);
+                    table.ForeignKey(
+                        name: "FK_Labels_Notes_Id",
+                        column: x => x.Id,
+                        principalTable: "Notes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Labels_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.InsertData(
                 table: "Notes",
                 columns: new[] { "Id", "AddReminder", "Color", "CreatedDate", "Image", "IsArchive", "IsNote", "IsPin", "IsTrash", "Message", "ModifiedDate", "Title", "UserId" },
-                values: new object[] { 1, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "White", new DateTime(2021, 9, 29, 22, 47, 23, 866, DateTimeKind.Local).AddTicks(5112), "abc.jpg", false, true, false, false, "Hello, this is my new note", new DateTime(2021, 9, 29, 22, 47, 23, 866, DateTimeKind.Local).AddTicks(8749), "New Note", 15L });
+                values: new object[] { 1, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "White", new DateTime(2021, 10, 5, 23, 7, 3, 826, DateTimeKind.Local).AddTicks(7254), "abc.jpg", false, true, false, false, "Hello, this is my new note", new DateTime(2021, 10, 5, 23, 7, 3, 828, DateTimeKind.Local).AddTicks(2463), "New Note", 15L });
 
             migrationBuilder.InsertData(
                 table: "Users",
@@ -95,6 +125,16 @@ namespace RepositoryLayer.Migrations
                 column: "Id");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Labels_Id",
+                table: "Labels",
+                column: "Id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Labels_UserId",
+                table: "Labels",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Users_Email",
                 table: "Users",
                 column: "Email",
@@ -106,6 +146,9 @@ namespace RepositoryLayer.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Collaborations");
+
+            migrationBuilder.DropTable(
+                name: "Labels");
 
             migrationBuilder.DropTable(
                 name: "Notes");

@@ -1,4 +1,5 @@
 ﻿using CommonLayer.Model.LabelModel;
+using CommonLayer.Model.NotesModel.Response;
 using RepositoryLayer.Entity;
 using System;
 using System.Collections.Generic;
@@ -8,10 +9,10 @@ namespace RepositoryLayer.Interface
 {
     public interface ILabelRL
     {
-        bool AddLabel(AddLabel addLabel,long userId);
+        bool AddLabel(AddLabel addLabel,long userId, int Id);
         bool EditLabel(EditLabel editLabelModel, long labelId);
         Label Get(long labelId);
         bool DeleteLabel(Label label);
-        IEnumerable<Label> DisplayLabel(long userId);
+        IEnumerable<LabelModel> DisplayLabel(long userId);
     }
 }

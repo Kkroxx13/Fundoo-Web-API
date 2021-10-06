@@ -25,6 +25,7 @@ namespace RepositoryLayer.Entity
         public long UserId { get; set; }     /// foreign key..               
 
         public IList<Collaboration> Collaborations { get; set; }
+        public IList<Label> Labels { get; set; }
 
 
     }

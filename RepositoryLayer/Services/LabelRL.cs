@@ -1,4 +1,5 @@
 ﻿using CommonLayer.Model.LabelModel;
+using CommonLayer.Model.NotesModel.Response;
 using Microsoft.Extensions.Configuration;
 using RepositoryLayer.Context;
 using RepositoryLayer.Entity;
@@ -20,12 +21,13 @@ namespace RepositoryLayer.Services
             _configuration = configuration;
         }
 
-        public bool AddLabel(AddLabel addLabel, long userId)
+        public bool AddLabel(AddLabel addLabel, long userId, int Id)
         {
             Label labelEntity = new Label();
             labelEntity.LabelId = addLabel.LabelId;
             labelEntity.LabelName = addLabel.LabelName;
             labelEntity.UserId = userId;
+            labelEntity.Id = Id;
             labelEntity.CreatedDateTime = DateTime.Now;
             labelEntity.ModifiedDateTime = DateTime.Now;
             _userContext.Labels.Add(labelEntity);
@@ -64,13 +66,39 @@ namespace RepositoryLayer.Services
                 throw;
             }
         }
-
-        public IEnumerable<Label> DisplayLabel(long userId)
+    //    var query = context.Customers
+    //.Join(
+    //    context.Invoices,
+    //    customer => customer.CustomerId,
+    //    invoice => invoice.Customer.CustomerId,
+    //    (customer, invoice) => new
+    //    {
+    //        InvoiceID = invoice.Id,
+    //        CustomerName = customer.FirstName + "" + customer.LastName,
+    //        InvoiceDate = invoice.Date
+    //    }
+    //).ToList();
+        public IEnumerable<LabelModel> DisplayLabel(long userId)
         {
             try
             {
-                List<Label> label = _userContext.Labels.Where(x => x.UserId == userId ).ToList();
-                return label;
+                //List<Label> label = _userContext.Labels.Where(x => x.UserId == userId ).ToList();
+
+                //return label;
+
+                var query = _userContext.Labels.Join(_userContext.Notes, label => label.Id, notes => notes.Id, (label, notes) => new LabelModel
+                {
+                    LabelId = label.LabelId,
+                    LabelName = label.LabelName,
+                    UserId = userId,
+                    Id = label.Id,
+                    Title = notes.Title,
+                    Message = notes.Message,
+                    Image = notes.Image,
+                    Color = notes.Color
+
+                }).ToList();
+                return query;
                 //return _userContext.Labels.ToList();
             }
             catch (Exception)

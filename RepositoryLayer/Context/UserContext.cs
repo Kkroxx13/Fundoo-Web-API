@@ -48,6 +48,11 @@ namespace RepositoryLayer.Context
                 .HasOne<User>(sc => sc.User)
                 .WithMany(s => s.Labels)
                 .HasForeignKey(sc => sc.UserId);
+
+            modelBuilder.Entity<Label>()
+                .HasOne<Notes>(sc => sc.Notes)
+                .WithMany(s => s.Labels)
+                .HasForeignKey(sc => sc.Id);
                 
             modelBuilder.Entity<User>().HasData(new User
             {

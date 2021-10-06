@@ -10,8 +10,8 @@ using RepositoryLayer.Context;
 namespace RepositoryLayer.Migrations
 {
     [DbContext(typeof(UserContext))]
-    [Migration("20211003100921_third")]
-    partial class third
+    [Migration("20211005173704_first")]
+    partial class first
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -52,6 +52,9 @@ namespace RepositoryLayer.Migrations
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
                     b.Property<string>("LabelName")
                         .HasColumnType("nvarchar(max)");
 
@@ -62,6 +65,8 @@ namespace RepositoryLayer.Migrations
                         .HasColumnType("bigint");
 
                     b.HasKey("LabelId");
+
+                    b.HasIndex("Id");
 
                     b.HasIndex("UserId");
 
@@ -121,14 +126,14 @@ namespace RepositoryLayer.Migrations
                             Id = 1,
                             AddReminder = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Color = "White",
-                            CreatedDate = new DateTime(2021, 10, 3, 15, 39, 20, 729, DateTimeKind.Local).AddTicks(5031),
+                            CreatedDate = new DateTime(2021, 10, 5, 23, 7, 3, 826, DateTimeKind.Local).AddTicks(7254),
                             Image = "abc.jpg",
                             IsArchive = false,
                             IsNote = true,
                             IsPin = false,
                             IsTrash = false,
                             Message = "Hello, this is my new note",
-                            ModifiedDate = new DateTime(2021, 10, 3, 15, 39, 20, 730, DateTimeKind.Local).AddTicks(7246),
+                            ModifiedDate = new DateTime(2021, 10, 5, 23, 7, 3, 828, DateTimeKind.Local).AddTicks(2463),
                             Title = "New Note",
                             UserId = 15L
                         });
@@ -211,11 +216,19 @@ namespace RepositoryLayer.Migrations
 
             modelBuilder.Entity("RepositoryLayer.Entity.Label", b =>
                 {
+                    b.HasOne("RepositoryLayer.Entity.Notes", "Notes")
+                        .WithMany("Labels")
+                        .HasForeignKey("Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("RepositoryLayer.Entity.User", "User")
                         .WithMany("Labels")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Notes");
 
                     b.Navigation("User");
                 });
@@ -223,6 +236,8 @@ namespace RepositoryLayer.Migrations
             modelBuilder.Entity("RepositoryLayer.Entity.Notes", b =>
                 {
                     b.Navigation("Collaborations");
+
+                    b.Navigation("Labels");
                 });
 
             modelBuilder.Entity("RepositoryLayer.Entity.User", b =>
